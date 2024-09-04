@@ -1,0 +1,22 @@
+.share {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    > a {
+        border: 0;
+        color: var(--gray-900);
+        text-decoration: none;
+        outline: none;
+        box-shadow: none;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 34px;
+        height: 36px;
+        font-size: toRem(16px);
+        transition: var(--base-transition);
+        &:hover {
+            color: var(--secondary) !important;
+        }
+    }
+}

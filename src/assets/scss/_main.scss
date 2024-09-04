@@ -1,0 +1,52 @@
+@import 'header';
+@import 'navbar';
+@import 'breadcrumb';
+@import 'card';
+@import 'process';
+@import 'index';
+@import 'aboutUs';
+@import 'serve';
+@import 'represent';
+@import 'contract';
+@import 'news';
+@import 'contact';
+@import 'copyright';
+@import 'pagination';
+@import 'share';
+@import 'footer';
+@import 'gotop';
+.warpper {
+    max-height: 100vh;
+}
+.section {
+    padding: 50px 0;
+}
+.main {
+    padding-top: $header-height;
+    position: relative;
+    overflow: hidden;
+}
+.cookies-box {
+    background-color: rgba($blue-50, 0.95);
+    padding: 10px 40px;
+    position: fixed;
+    width: 100%;
+    z-index: 100;
+    .consentButton {
+        padding: 4px 16px;
+        font-size: toRem(14px);
+        line-height: toRem(24px);
+    }
+}
+.hr {
+    border-top: 1px solid var(--gray-200);
+}
+.page-title {
+    font-size: toRem(50px);
+    line-height: toRem(70px);
+    padding: {
+        top: 60px;
+        bottom: 60px;
+    };
+    position: relative;
+}

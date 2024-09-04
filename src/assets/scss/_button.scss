@@ -1,0 +1,82 @@
+button {
+    cursor: pointer;
+}
+.btn {
+    display: inline-block;
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--gray-800);
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    border: none;
+    box-shadow: none;
+    font-family: inherit;
+}
+.btn-primary {
+    background-image: linear-gradient(to right, #3C49BA , #848DD7);
+    color: var(--white) !important;
+    padding: 10px 21px;
+    transition: var(--base-transition);
+    &:hover {
+        color: var(--white) !important;
+        text-decoration: none !important;
+        background-image: linear-gradient(to right, var(--primary-600) , #5E69CB);
+        box-shadow: var(--base-btn-box-shadow);
+    }
+}
+.btn-secondary {
+    display: inline-block;
+    background-color: var(--white);
+    border: 1px solid var(--white);
+    color: var(--btn-color);
+    transition: .3s ease;
+    text-decoration: none;
+    font-size: 1.25rem;
+    font-weight: var(--bolder);
+    padding: 10px 48px;
+    &:hover {
+        color: var(--btn-hover);
+        border-color: var(--btn-hover);
+    }
+}
+.btn-contact {
+    display: inline-block;
+    
+    color: var(--white) !important;
+    background-color: var(--primary);
+    font-size: toRem(20px);
+    font-weight: var(--bolder);
+    padding: 10px 42px;
+    transition: var(--base-transition);
+    text-decoration: none !important;
+    &:hover {
+        color: var(--white) !important;
+        background-color: var(--btn-hover);
+    }
+}
+.btn-block-primary {
+    color: var(--primary);
+    font-size: toRem(16px);
+    transition: var(--base-transition);
+    display: inline-block;
+    position: relative;
+    padding-right: 45px;
+    font-weight: 600;
+    text-decoration: none;
+    i {
+        position: absolute;
+        font-size: toRem(20px);
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        transition: var(--base-transition);
+    }
+    &:hover {
+        color: var(--primary-700);
+        i {
+            right: 16px;
+        }
+    }
+}

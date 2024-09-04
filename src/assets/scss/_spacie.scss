@@ -1,0 +1,34 @@
+@each $key, $value in $grid-breakpoints {
+    @if not $value {
+        @each $pro in $property {
+            @each $side in $sides {
+                @each $spacKey, $spacValue in $spacies {
+                    .#{$pro}#{$side}-#{$spacKey} {
+                        @include generate($pro, $side, $spacValue);
+                    }
+                }
+            }
+        }
+    } @else {
+        @media screen and (min-width: $value) {
+            @each $pro in $property {
+                @each $side in $sides {
+                    @each $spacKey, $spacValue in $spacies {
+                        .#{$pro}#{$side}-#{$key}-#{$spacKey} {
+                            @include generate($pro, $side, $spacValue);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+.mx-xs-1_5 {
+    @include media-breakpoint-down(xs) {
+        margin: {
+            left: -1.5rem;
+            right: -1.5rem;
+        };
+    }
+    
+}

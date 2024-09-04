@@ -1,0 +1,17 @@
+.img-fluid {
+	width: auto !important;
+	max-width: 100% !important;
+	height: auto !important;
+}
+.figure {
+    .figure-img {
+        width: 100%;
+    }
+    .figure-caption {
+        color: var(--gray-600);
+        font-size: toRem(14px);
+        line-height: toRem(24px);
+        padding-top: 8px;
+        text-align: center;
+    }
+}
