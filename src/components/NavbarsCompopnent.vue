@@ -1,5 +1,5 @@
 <template>
-    <ul class="navbars">
+    <ul class="navbars" :class="{ active : isActive }">
         <li class="menu-item">
             <a href="#" data-toggle="sub-menu" title="關於我們">關於我們</a>
             <ul class="sub-menu">
@@ -14,7 +14,6 @@
             <a href="#" data-toggle="sub-menu" title="資安法專區">資安法專區</a>
             <ul class="sub-menu sub-menu-multiple">
                 <li>
-                    <!-- <RouterLink :to="{name: 'serve', params: { serveName: 'MOC'}}" title="資安監控維運服務 MOC">資安監控維運服務 MOC</RouterLink> -->
                     <RouterLink to="/serveMoc" title="資安監控維運服務 MOC">資安監控維運服務 MOC</RouterLink>
                     <RouterLink to="/serveHeis" title="社交工程演練 HEIS">社交工程演練 HEIS</RouterLink>
                     <RouterLink to="/serveSrmas" title="系統資源監測 SRMAS">系統資源監測 SRMAS</RouterLink>
@@ -48,6 +47,25 @@
         <li><RouterLink to="/contact" title="聯繫我們">聯繫我們</RouterLink></li>
     </ul>
     <ul>
-        <li class="d-block d-lg-none"><a href="#" id="menu-bars" title=""><i class="fa-solid fa-bars"></i></a></li>
+        <li class="d-block d-lg-none"><a href="#" id="menu-bars" title="" @click="isBars"><i class="fa-solid" :class="{ 'fa-bars' : iconBars, 'fa-xmark' : iconXmark }"></i></a></li>
     </ul>
 </template>
+<script>
+    export default {
+        data() {
+            return {
+                isActive: false,
+                iconBars: true,
+                iconXmark: false
+            }
+        },
+        methods: {
+            isBars() {
+                this.isActive = !this.isActive
+                this.iconBars = !this.iconBars
+                this.iconXmark = !this.iconXmark
+
+            }
+        }
+    }
+</script>
