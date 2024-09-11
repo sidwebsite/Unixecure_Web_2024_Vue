@@ -250,29 +250,3 @@ $utilities: (
         transform: rotate(90deg);
     }
 }
-.mw-760 {
-    max-width: calc(760px + $container-padding-x);
-    @include make-container($gutter:3rem);
-    @include media-breakpoint-up(xs) {
-        @include make-container($gutter:5rem);
-    }
-}
-.mw-500 {
-    max-width: 500px;
-    width: 100%;
-}
-.mw-380 {
-    max-width: 380px;
-}
-.mw-lg-380 {
-    --gutter-x: 3rem;
-    width: 100%;
-    padding-right: calc(var(--gutter-x) / 2);
-    padding-left: calc(var(--gutter-x) / 2);
-    @include media-breakpoint-up(xs) {
-        --gutter-x: 5rem
-    }
-    @include media-breakpoint-up(lg) {
-        max-width: calc(380px + ($container-padding-x / 2));
-    }
-}

@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormEmail" class="form-label"><span>*</span>電子信箱 Email</label>
-                            <Field type="email" class="form-control" id="FormEmail" v-model="forms.FormEmail" name="FormEmail" :rules="validateEmail" placeholder="請輸入電子信箱 Email" />
+                            <Field type="email" class="form-control" id="FormEmail" v-model.trim="forms.FormEmail" name="FormEmail" :rules="validateEmail" placeholder="請輸入電子信箱 Email" />
                             <ErrorMessage class="text-alarm" name="FormEmail" />
                         </div>
                         <div class="col-md-6 mb-4">
@@ -314,13 +314,15 @@
                 console.log(checked)
             },
             onSubmit(values) {
-                const api = 'https://10.13.202.198:7070/api/contact_us/insert';
-                // fetch
-                fetch(api, {
+                const path = 'https://10.13.202.198:7070/api/contact_us/insert';
+                const requestOptions = {
                     method: 'post',
-                    body: values,
-                }).then((response) => {
-                    console.log(response.data)
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(values, null, 2)
+                }
+                // fetch
+                fetch(path, requestOptions).then((response) => {
+                    response.json()
                 }).catch(err => {
                     console.log(err)
                 })

@@ -68,18 +68,10 @@
                     },
                     {
                         Id: '10',
-                        Name: 'skyhigh'
-                    },
-                    {
-                        Id: '11',
-                        Name: 'SecurityScorecard'
-                    },
-                    {
-                        Id: '12',
                         Name: 'tufin'
                     },
                     {
-                        Id: '13',
+                        Id: '11',
                         Name: 'claroty'
                     },
                 ]
@@ -87,7 +79,3 @@
         }
     }
 </script>
-
-<style>
-
-</style>

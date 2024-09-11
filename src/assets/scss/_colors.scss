@@ -5,7 +5,7 @@
     }    
     // background color
     .bg-#{$name} {
-        background-color: var(--#{$name});
+        background-color: var(--#{$name}) !important;
         color: var(--white);
         @if $name == 'white' {
             color: var(--gray);
@@ -52,4 +52,10 @@
 }
 .bg-gray-100-50 {
     background-color: rgba($gray-100, 0.5);
+}
+.text-aboutUs-blue {
+    color: $aboutUs-blue;
+}
+.bg-aboutUs-blue {
+    background-color: $aboutUs-blue;
 }

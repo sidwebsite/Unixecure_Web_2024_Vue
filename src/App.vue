@@ -25,7 +25,8 @@
             <!-- footer contact start -->
             <section class="footer-contact">
                 <div class="footer-contact-container">
-                    <h1>企業方案 IT 服務 / 解決方案諮詢<br />歡迎聯繫智慧資安</h1>
+                    <p class="text-secondary-300 pb-0 fw-bolder fs-6">企業方案 IT 服務 / 解決方案諮詢</p>
+                    <h1>歡迎聯繫智慧資安</h1>
                     <p>uniXecure 提供資安管理循環，提供 <span class="text-secondary-300">事前預防</span>、<span class="text-secondary-300">事中偵測</span>、<span class="text-secondary-300">事後應處</span> 完整一站式資安服務，滿足營運及落實資安需求。以全天候 24x7 小時維運服務，整合人員、技術與程序，解決資安合規性、資安人才缺乏窘境，並與企業一起因應日益嚴峻的資安挑戰，守護企業的資訊安全，協助企業無後顧之憂發展組織核心業務。</p>
                     <RouterLink to="/contact" class="btn-secondary">聯絡我們</RouterLink>
                 </div>

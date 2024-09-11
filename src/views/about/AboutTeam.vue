@@ -1,15 +1,13 @@
 <template>
-    <section class="bg-gray-50 overflow-hidden">
-        <div class="container position-relative">
-            <!-- background images start -->
-            <span class="aboutUs_bg">
-                <img src="../../assets/images/aboutUs/aboutUs_title_bg.svg" alt="">
-            </span>
-            <!-- background images end -->
-            <h1 class="page-title text-white">經營團隊</h1>
+    <section>
+        <div class="aboutUs-page-title">
+            <h1 class="page-title text-white text-center">經營團隊</h1>
         </div>
-        <div class="mw-760 mx-auto pb-9">
+    </section>
+    <section class="bg-gray-50 ">
+        <div class="mw-760 mx-auto py-9">
             <div class="row">
+                <h3 class="text-center text-aboutUs-blue mb-6">專業頂級的團隊</h3>
                 <div class="col-md-4">
                     <figure class="figure mb-3 text-center">
                         <img src="../../assets/images/aboutUs/teamPeople01.png" class="img-fluid" alt="詹伊正">
@@ -45,11 +43,15 @@
         </div>
     </section>
     <section class="py-9 organization">
-        <div class="mw-760">
-            <h3 class="mb-5 text-center">智慧資安科技組織架構表</h3>
-            <figure class="figure">
-                <img src="../../assets/images/aboutUs/organization.png" class="img-fluid" alt="...">
-            </figure>
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                        <h3 class="mb-5 text-center text-white">智慧資安科技組織架構表</h3>
+                    <figure class="figure">
+                        <img src="../../assets/images/aboutUs/organization.png" class="img-fluid" alt="...">
+                    </figure>
+                </div>
+            </div>
         </div>
     </section>
     <section class="py-9">
@@ -62,7 +64,7 @@
                     <div class="th">描述</div>
                 </div>
                 <div class="tr">
-                    <div class="td fw-bolder fs-6">事業發展部</div>
+                    <div class="td text-primary fw-bolder fs-6">事業發展部</div>
                     <div class="td">
                         <div class="proficiency-tooltip">
                             <span class="proficiency-tooltipText">CCSE、CEH、ISO 22301、ISO 27001、ISO 27001:2022、NSPA、PMP、AWS、CA、CCSA、GCP，TCSE、AWS、BIG Date、Azure…等</span>
@@ -91,7 +93,7 @@
                     </div>
                 </div>
                 <div class="tr">
-                    <div class="td fw-bolder fs-6">資安服務發展部</div>
+                    <div class="td text-primary fw-bolder fs-6">資安服務發展部</div>
                     <div class="td">
                         <div class="proficiency-tooltip">
                             <span class="proficiency-tooltipText">CCNA、CEH、CHFI、ECIH、CND、CSA、EDRP、FCNSE、PC Services、Azure、MCP、MCSA、NSPA、ISO 27001、ISO 27001:2022、TCSE、VMTSP、CISSP、CCDA、CCNP、CCISO、ECIH、ECSA、Forcepoint、AWS、WALLiX、CASE、DEC VxRail、PMP、SCJP、Security Compliance, and Identity、MTA、ITIL…等</span>
@@ -120,7 +122,7 @@
                     </div>
                 </div>
                 <div class="tr">
-                    <div class="td fw-bolder fs-6">資安產品研發部</div>
+                    <div class="td text-primary fw-bolder fs-6">資安產品研發部</div>
                     <div class="td">
                         <div class="proficiency-tooltip">
                             <span class="proficiency-tooltipText">Azure、CASE、CSM、GCP、ISMS、ISO 27701、MCP、MCTS、Microsoft Specialist、MS Office、MTA、OCE、OCP 10g、OCP 11g、OCP Programmer、PMP、Power Systems、SCJP、Web Component Developer、Adobe Certified Associate、AWS、CASE、CEH、CSSLP、NSPA、RHCT、CEH、CASE、ISO 27001:2022、CSA…等</span>
@@ -145,7 +147,7 @@
                     </div>
                 </div>
                 <div class="tr">
-                    <div class="td py-3">資安合規事業發展處</div>
+                    <div class="td text-primary fw-bolder fs-6 py-3">資安合規事業發展處</div>
                     <div class="td py-3">
                         <div class="proficiency-tooltip">
                             <span class="proficiency-tooltipText">AWS、Azure、CCNA、CCNP、CCSA、CCSE、CEH、CIS、CISA、CISSP、CISM、CompTIA、ISO 27001:2022、ISO 27701、PCNSE、PMP、Security, Compliance, and Identity、VCP、Zscaler…等</span>

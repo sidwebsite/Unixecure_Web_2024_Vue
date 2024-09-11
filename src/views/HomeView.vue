@@ -6,10 +6,10 @@
         <!-- background images start -->
         <div class="container-absolute z-index-1 d-none d-lg-block">
             <div class="container h-100 position-relative">
-                <span ref="hexagonRight" class="hexagon-bg-right position-absolute">
+                <span :style="{ 'top': hexagonRightValue }" class="hexagon-bg-right position-absolute">
                     <img src="../assets/images/hexagon_right.svg" alt="" />
                 </span>
-                <span ref="hexagonLeft" class="hexagon-bg-left position-absolute">
+                <span :style="{ 'top': hexagonLeftValue }" class="hexagon-bg-left position-absolute">
                     <img src="../assets/images/hexagon_left.svg" alt="" />
                 </span>
             </div>
@@ -160,7 +160,6 @@
     import IndexVideo from "../components/Index/IndexVideo.vue";
     import IndexNews from "../components/Index/IndexNews.vue";
     import { banner, news } from "../assets/json/data.json";
-
     export default {
         data() {
             return {
@@ -169,6 +168,8 @@
                 video: {},
                 news: [],
                 init: 0,
+                hexagonRightValue: '-155px',
+                hexagonLeftValue: '365px'
             };
         },
         components: {
@@ -182,16 +183,16 @@
         },
         created() {
             this.banner = banner;
-            this.statements = news.statements[this.init];
-            this.video = news.video[this.init];
-            this.news = news.news;
-            // window.addEventListener("scroll", this.scrollListener);
+            this.statements = news.statements[this.init]
+            this.video = news.video[this.init]
+            this.news = news.news
+            window.addEventListener('scroll', this.scrollListener)
         },
-        // methods: {
-        //     scrollListener() {
-        //         this.$refs.hexagonRight.style.top = `${scrollY * 0.5 - 155}px`;
-        //         this.$refs.hexagonLeft.style.bottom = `-${scrollY * 0.5 + 145}px`;
-        //     },
-        // },
+        methods: {
+            scrollListener() {
+                this.hexagonRightValue = scrollY * 0.5 - 155 + 'px'
+                this.hexagonLeftValue = scrollY * 0.5 + 365 + 'px'
+            }
+        }
     };
 </script>
