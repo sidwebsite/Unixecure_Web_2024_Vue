@@ -35,19 +35,7 @@
         </div>
     </section>
     <!-- 多項國際認證，值得信賴 -->
-    <section class="py-9 overflow-hidden">
-        <!-- background images start -->
-        <div class="container-absolute position-fixed bg-primary-50">
-            <div class="container h-100 position-relative">
-                <span class="index-serve-hexagon-leftBottom position-absolute">
-                    <img src="../assets/images/index/index-serve-hexagon.svg" alt="" />
-                </span>
-                <span class="index-serve-hexagon-rightTop position-absolute">
-                    <img src="../assets/images/index/index-serve-hexagon.svg" alt="" />
-                </span>
-            </div>
-        </div>
-        <!-- background images end -->
+    <section class="py-9 index-serve-bg">
         <div class="mw-760 mx-auto">
         <div class="row">
             <div class="col-12">

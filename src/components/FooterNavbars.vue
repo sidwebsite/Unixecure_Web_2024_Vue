@@ -19,6 +19,10 @@
                 <div>
                     <RouterLink to="/serveLucas" title="LUCAS">LUCAS</RouterLink>
                     <RouterLink to="/serveSesc" title="SESC">SESC</RouterLink>
+                    <RouterLink to="/serveAppCheck" title="SESC">APP 檢測</RouterLink>
+                    <RouterLink to="/serveCse" title="SESC">資安健診</RouterLink>
+                    <RouterLink to="/serveCodeDetect" title="SESC">原始碼檢測</RouterLink>
+                    <RouterLink to="/serveGcb" title="SESC">政府組態基準</RouterLink>
                 </div>
             </div>
         </div>

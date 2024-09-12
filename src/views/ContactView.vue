@@ -9,7 +9,7 @@
         <h1 class="page-title text-white">聯繫我們</h1>
         <div class="bg-white-80 border border-white backdrop-blur-60 pt-5 pb-9 mx-xs-1_5">
             <div class="mw-760">
-                <Form @submit="onSubmit">
+                <Form @submit.prevent="handleSubmit(onSubmit)">
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label for="FormName" class="form-label"><span>*</span>聯絡人姓名</label>
@@ -131,11 +131,6 @@
 <script>
     import { Form, Field, ErrorMessage } from 'vee-validate';
     export default {
-        components: {
-            Form,
-            Field,
-            ErrorMessage 
-        },
         data() {
             return {
                 errorMessages: {
@@ -277,7 +272,12 @@
                 isDisabled: true,
                 errorMessage: false
             }
-        },        
+        },
+        components: {
+            Form,
+            Field,
+            ErrorMessage 
+        },
         methods: {
             isRequired(value) {
                 if (!value) {
@@ -313,19 +313,42 @@
                 checked = this.isDisabled
                 console.log(checked)
             },
-            onSubmit(values) {
-                const path = 'https://10.13.202.198:7070/api/contact_us/insert';
-                const requestOptions = {
-                    method: 'post',
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(values, null, 2)
-                }
-                // fetch
-                fetch(path, requestOptions).then((response) => {
-                    response.json()
-                }).catch(err => {
-                    console.log(err)
+            handleSubmit(onSubmit) {
+                this.$refs.form.validate().then(isValid => {
+                    if (isValid) {
+                        onSubmit()
+                    }
                 })
+            },
+            async onSubmit() {
+                const path = 'https://10.13.202.198:7070/api/contact_us/insert';
+                try {
+                    const response = await fetch(path, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            FormCompany: this.forms.FormCompany,
+                            FormName: this.forms.FormName,
+                            FormDepartment: this.forms.FormDepartment,
+                            FormTitle: this.forms.FormTitle,
+                            FormTel: this.forms.FormTel,
+                            FormEmail: this.forms.FormEmail,
+                            FormItem: this.forms.FormItem,
+                            FormRemark: this.forms.FormRemark
+                        })
+                    })
+                    
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok')
+                    }
+
+                    const result = await response.json()
+                    console.log('Success:', result)
+                } catch (error) {
+                    console.error('Error:', error)
+                }
             },
         }
     }

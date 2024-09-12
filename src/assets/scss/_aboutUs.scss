@@ -13,6 +13,9 @@
 //     };
 //     // margin-bottom: 50px;
 // }
+.aboutUs-bg-color {
+    background-color: var(--aboutUs-bg-color);
+}
 .aboutUs-page-title {
     background: url('../images/bg.png');
     background-position: center top;
@@ -26,8 +29,8 @@
         height: 100%;
         position: absolute;
         top: 0;
-        left: 0;
-        background-color: rgba($blue-700, 0.8);
+        left: 0;        
+        background: linear-gradient(310.44deg, rgba(33, 35, 74, 0.7) 25.06%, rgba(90, 117, 215, 0.7) 91.59%);
         backdrop-filter:blur(12px);
         -webkit-backdrop-filter:blur(12px);
     }
@@ -70,6 +73,8 @@
     padding: 24px 8px;
     text-align: center;
     height: 100%;
+    backdrop-filter:blur(20px);
+    -webkit-backdrop-filter:blur(20px);
 }
 .introduction-global {
     background-color: $aboutUs-blue;
@@ -210,7 +215,7 @@
     background-repeat: no-repeat;
 }
 .team-table {
-    background-color: rgba($gray-100, .5);
+    background-color: rgba($gray-50, .5);
     padding: 16px 24px;
     > .tr {
         display: block;
@@ -331,7 +336,7 @@
 
 // 專業證照
 .proficiency {
-    background-color: rgba($gray-100, .5);
+    background-color: rgba($gray-50, .5);
     padding: 16px 24px;
 }
 .proficiency-table {

@@ -1,12 +1,18 @@
 <template>
     <section class="pb-9">
-        <div class="container position-relative">
+        <!-- background images start -->
+    <div class="container-fixed">
+        <div class="container h-100 position-relative">
             <span class="copyright_left position-absolute">
                 <img src="../assets/images/copyright/copyright_left.svg" alt="">
             </span>
             <span class="copyright_right position-absolute">
                 <img src="../assets/images/copyright/copyright_right.svg" alt="">
             </span>
+        </div>
+    </div>
+    <!-- background images end -->
+        <div class="container position-relative">
             <div class="row position-relative">
                 <div class="col-12">
                     <h1 class="page-title">著作權及隱私權聲明</h1>
