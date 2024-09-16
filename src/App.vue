@@ -7,6 +7,7 @@
 </script>
 
 <template>
+    
     <div class="wrapper">
         <header class="header d-flex align-items-center">
             <div class="logo">
@@ -18,7 +19,11 @@
         </header>
         <!--  -->
         <main class="main">
-            <RouterView />
+            <router-view v-slot="{ Component, route }">
+                <transition name="fade">
+                    <component :is="Component" :key="route.path" />
+                </transition>
+            </router-view>
         </main>
         <!--  -->
         <footer class="footer">
@@ -67,3 +72,14 @@
     </div>
     <ScrollTop></ScrollTop>
 </template>
+<style lang="css">
+    .fade-enter-active,
+    .fade-leave-active {
+        transition: opacity 0.5s ease;
+    }
+
+    .fade-enter-from,
+    .fade-leave-to {
+        opacity: 0;
+    }
+</style>

@@ -9,7 +9,7 @@
         <h1 class="page-title text-white">聯繫我們</h1>
         <div class="bg-white-80 border border-white backdrop-blur-60 pt-5 pb-9 mx-xs-1_5">
             <div class="mw-760">
-                <Form @submit.prevent="handleSubmit(onSubmit)">
+                <Form @submit="handleSubmit(onSubmit)">
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label for="FormName" class="form-label"><span>*</span>聯絡人姓名</label>
