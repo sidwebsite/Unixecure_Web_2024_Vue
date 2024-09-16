@@ -314,7 +314,7 @@
                 console.log(checked)
             },
             handleSubmit(onSubmit) {
-                this.$refs.form.validate().then(isValid => {
+                this.$refs.form.isRequired().then(isValid => {
                     if (isValid) {
                         onSubmit()
                     }
