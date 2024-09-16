@@ -1,12 +1,17 @@
 import './assets/scss/style.scss'
 
-import { createApp } from 'vue'
+import { createApp, h } from 'vue'
 import { createPinia } from 'pinia'
 
 import App from './App.vue'
 import router from './router'
 import vSelect from "vue-select";
 import VueSocials from 'vue-socials';
+vSelect.props.components.default = () => ({
+    OpenIndicator: {
+        render: () => h('span',  {class: {'fa-regular fa-angle-down': true}}),
+    },
+});
 
 const app = createApp(App)
 

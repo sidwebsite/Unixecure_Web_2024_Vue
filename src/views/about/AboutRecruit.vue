@@ -27,7 +27,7 @@
                 </div>
             </div>
             <!-- background images end -->
-            <div class="mw-760 position-relative">
+            <div class="mw-760 position-relative z-index-3">
                 <h3 class="mb-6 text-center text-aboutUs-blue">福利制度</h3>
                 <Tabs></Tabs>
                 <div class="d-flex gap-3 justify-content-center flex-wrap">

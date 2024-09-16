@@ -18,7 +18,7 @@
                         <div class="col-md-6">
                             <div class="card-img">
                                 <div class="bg-img">
-                                    <img :src="item.picDownloadPath" class="img-fluid">
+                                    <img :src="`pic/cases/${item.picDownloadPath}`" class="img-fluid">
                                 </div>
                             </div>
                         </div>

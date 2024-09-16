@@ -13,27 +13,27 @@
                     <div class="row">
                         <div class="col-md-6 mb-4">
                             <label for="FormName" class="form-label"><span>*</span>聯絡人姓名</label>
-                            <Field type="text" class="form-control" id="FormName" v-model="forms.FormName" name="FormName" :rules="isRequired" placeholder="請輸入聯絡人姓名" />
+                            <Field type="text" class="form-control" id="FormName" v-model="forms.Name" name="FormName" :rules="isRequired" placeholder="請輸入聯絡人姓名" />
                             <ErrorMessage class="text-alarm" name="FormName" />
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormCompany" class="form-label"><span>*</span>公司名稱</label>
-                            <Field type="text" class="form-control" id="FormCompany" v-model="forms.FormCompany" name="FormCompany" :rules="isRequired" placeholder="請輸入公司名稱" />
+                            <Field type="text" class="form-control" id="FormCompany" v-model="forms.Company" name="FormCompany" :rules="isRequired" placeholder="請輸入公司名稱" />
                             <ErrorMessage class="text-alarm" name="FormCompany" />
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormEmail" class="form-label"><span>*</span>電子信箱 Email</label>
-                            <Field type="email" class="form-control" id="FormEmail" v-model.trim="forms.FormEmail" name="FormEmail" :rules="validateEmail" placeholder="請輸入電子信箱 Email" />
+                            <Field type="email" class="form-control" id="FormEmail" v-model.trim="forms.Email" name="FormEmail" :rules="validateEmail" placeholder="請輸入電子信箱 Email" />
                             <ErrorMessage class="text-alarm" name="FormEmail" />
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormTel" class="form-label"><span>*</span>聯絡電話（分機請加上#）</label>
-                            <Field type="text" class="form-control" id="FormTel" v-model="forms.FormTel" name="FormTel" :rules="validateTel" placeholder="請輸入聯絡電話" />
+                            <Field type="text" class="form-control" id="FormTel" v-model="forms.Tel" name="FormTel" :rules="validateTel" placeholder="請輸入聯絡電話" />
                             <ErrorMessage class="text-alarm" name="FormTel" />
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormDepartment" class="form-label"><span>*</span>部門</label>
-                            <Field class="form-select" id="FormDepartment" v-model="forms.FormDepartment" name="FormDepartment" as="select" :rules="isRequired">
+                            <Field class="form-select" id="FormDepartment" v-model="forms.Department" name="FormDepartment" as="select" :rules="isRequired">
                                 <option disabled value="">請選擇部門</option>
                                 <option :value="item.value" v-for="item in departmentOptions" :key="item.text">{{ item.text }}</option>
                             </Field>
@@ -41,7 +41,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormTitle" class="form-label"><span>*</span>職務</label>
-                            <Field class="form-select" id="FormTitle" v-model="forms.FormTitle" name="FormTitle" as="select" :rules="isRequired">
+                            <Field class="form-select" id="FormTitle" v-model="forms.JobTitle" name="FormTitle" as="select" :rules="isRequired">
                                 <option disabled value="">請選擇職務</option>
                                 <option :value="item.value" v-for="item in titleOptions" :key="item.text">{{ item.text }}</option>
                             </Field>
@@ -49,11 +49,11 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormCompilationId" class="form-label">公司統一編號</label>
-                            <Field type="text" class="form-control" id="FormCompilationId" v-model="forms.FormCompilationId" name="FormCompilationId" placeholder="請輸入公司統一編號" />
+                            <Field type="text" class="form-control" id="FormCompilationId" v-model="forms.CompilationId" name="FormCompilationId" placeholder="請輸入公司統一編號" />
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="FormIndustry" class="form-label"><span>*</span>行業別</label>
-                            <Field class="form-select" id="FormIndustry" v-model="forms.FormIndustry" name="FormIndustry" as="select" :rules="isRequired">
+                            <Field class="form-select" id="FormIndustry" v-model="forms.Industry" name="FormIndustry" as="select" :rules="isRequired">
                                 <option disabled value="">請選擇行業別</option>
                                 <option :value="item.value" v-for="item in industryOptions" :key="item.text">{{ item.text }}</option>
                             </Field>
@@ -61,7 +61,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormBudget" class="form-label"><span>*</span>資安預算</label>
-                            <Field class="form-select" id="FormBudget" v-model="forms.FormBudget" name="FormBudget" as="select" :rules="isRequired">
+                            <Field class="form-select" id="FormBudget" v-model="forms.Budget" name="FormBudget" as="select" :rules="isRequired">
                                 <option disabled value="">請選擇資安預算</option>
                                 <option :value="item.value" v-for="item in budgetOptions" :key="item.text">{{ item.text }}</option>
                             </Field>
@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-md-6 mb-4">
                             <label for="FormStaffing" class="form-label">貴公司資安專責人編制</label>
-                            <Field class="form-select" id="FormStaffing" v-model="forms.FormStaffing" name="FormStaffing" as="select">
+                            <Field class="form-select" id="FormStaffing" v-model="forms.Staffing" name="FormStaffing" as="select">
                                 <option disabled value="">請選擇</option>
                                 <option :value="item.value" v-for="item in staffingOptions" :key="item.text">{{ item.text }}</option>
                             </Field>
@@ -77,29 +77,29 @@
                         <div class="col-12 mb-3 fs-6">諮詢項目</div>
                         <div class="col-md-6 mb-3">
                             <label for="FormServes" class="form-label">資安法相關</label>
-                            <Field class="form-select" id="FormServes" v-model="forms.FormServes" name="FormServes" as="select">
+                            <Field class="form-select" id="FormServes" v-model="forms.Serves" name="FormServes" as="select">
                                 <option disabled value="" >請選擇資安法相關</option>
                                 <option :value="item.value" v-for="item in servesOptions" :key="item.text">{{ item.text }}</option>
                             </Field>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="FormRepresent" class="form-label">代理產品</label>
-                            <Field class="form-select" id="FormRepresent" v-model="forms.FormRepresent" name="FormRepresent" as="select">
+                            <Field class="form-select" id="FormRepresent" v-model="forms.Represent" name="FormRepresent" as="select">
                                 <option disabled value="" >請選擇代理產品</option>
                                 <option :value="item.value" v-for="item in representOpptions" :key="item.text">{{ item.text }}</option>
                             </Field>
                         </div>
                         <div class="col-12 mb-4">
                             <div class="form-check form-check-inline mb-3">
-                                <Field class="form-check-input" type="checkbox" id="FormItem1" v-model="forms.FormItem" value="詢問產品價格" name="FormItem" />
+                                <Field class="form-check-input" type="checkbox" id="FormItem1" v-model="forms.ConsultingProject" value="詢問產品價格" name="FormItem" />
                                 <label class="form-check-label" for="FormItem1">詢問產品價格</label>
                             </div>
                             <div class="form-check form-check-inline mb-3">
-                                <Field class="form-check-input" type="checkbox" id="FormItem2" v-model="forms.FormItem" value="了解產品資訊" name="FormItem" />
+                                <Field class="form-check-input" type="checkbox" id="FormItem2" v-model="forms.ConsultingProject" value="了解產品資訊" name="FormItem" />
                                 <label class="form-check-label" for="FormItem2">了解產品資訊</label>
                             </div>
                             <div class="form-check form-check-inline mb-3">
-                                <Field class="form-check-input" type="checkbox" id="FormItem3" v-model="forms.FormItem" value="索取相關活動" name="FormItem" />
+                                <Field class="form-check-input" type="checkbox" id="FormItem3" v-model="forms.ConsultingProject" value="索取相關活動" name="FormItem" />
                                 <label class="form-check-label" for="FormItem3">索取相關活動</label>
                             </div>
                             <div class="form-check form-check-inline mb-3">
@@ -107,10 +107,10 @@
                                 <label class="form-check-label" for="FormItem4">預約 POC</label>
                             </div>
                             <div class="form-check mb-1">
-                                <Field class="form-check-input" type="checkbox" id="FormItem5" v-model="forms.FormItem" value="其他" name="FormItem" @click="clearTextarea(otherChecked)" />
+                                <Field class="form-check-input" type="checkbox" id="FormItem5" v-model="forms.ConsultingProject" value="其他" name="FormItem" @click="clearTextarea(otherChecked)" />
                                 <label class="form-check-label" for="FormItem5">其他</label>
                             </div>
-                            <Field as="textarea" class="form-control" id="FormRemark" v-model="forms.FormRemark" name="FormRemark" rows="3" placeholder="請輸入其他諮詢項目" :disabled="isDisabled" />
+                            <Field as="textarea" class="form-control" id="FormRemark" v-model="forms.Remark" name="FormRemark" rows="3" placeholder="請輸入其他諮詢項目" :disabled="isDisabled" />
                             <!-- <ErrorMessage class="text-alarm" name="FormRemark" /> -->
                         </div>
                         <div class="col-12">
@@ -254,20 +254,20 @@
                     {text: 'Tufin', value: 'Tufin'}
                 ],
                 forms: {
-                    FormName: '',
-                    FormCompany: '',
-                    FormEmail: '',
-                    FormTel: '',
-                    FormDepartment: '',
-                    FormTitle: '',
-                    FormCompilationId: '',
-                    FormIndustry: '',
-                    FormBudget: '',
-                    FormStaffing: '',
-                    FormServes: '',
-                    FormRepresent: '',
-                    FormItem: [],
-                    FormRemark: ''
+                    Name: '',
+                    Company: '',
+                    Email: '',
+                    Tel: '',
+                    Department: '',
+                    JobTitle: '',
+                    CompilationId: '',
+                    Industry: '',
+                    Budget: '',
+                    Staffing: '',
+                    Serves: '',
+                    Represent: '',
+                    ConsultingProject: [],
+                    Remark: ''
                 },
                 isDisabled: true,
                 errorMessage: false
@@ -329,25 +329,25 @@
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            FormCompany: this.forms.FormCompany,
-                            FormName: this.forms.FormName,
-                            FormDepartment: this.forms.FormDepartment,
-                            FormTitle: this.forms.FormTitle,
-                            FormTel: this.forms.FormTel,
-                            FormEmail: this.forms.FormEmail,
-                            FormItem: this.forms.FormItem,
-                            FormRemark: this.forms.FormRemark
+                            CompanyName: this.forms.Company,
+                            ContactName: this.forms.Name,
+                            Department: this.forms.Department,
+                            JobTitle: this.forms.JobTitle,
+                            ContactTel: this.forms.Tel,
+                            ContactEamil: this.forms.Email,
+                            ConsultingProject: this.forms.ConsultingProject.toString(),
+                            Remark: this.forms.Remark
                         })
                     })
                     
                     if (!response.ok) {
-                        throw new Error('Network response was not ok')
+                        throw new Error('網路沒有回應')
                     }
 
                     const result = await response.json()
-                    console.log('Success:', result)
+                    console.log('成功:', result)
                 } catch (error) {
-                    console.error('Error:', error)
+                    console.error('失敗:', error)
                 }
             },
         }

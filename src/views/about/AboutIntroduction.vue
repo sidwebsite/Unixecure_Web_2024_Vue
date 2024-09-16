@@ -51,7 +51,7 @@
                 <h4 class="text-center text-white mb-6">全域聯防 2.0-強化資安效度、維度 提升防禦深度</h4>
                 <div class="row">
                     <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                        <div class="introduction-global-item">
+                        <div class="introduction-global-item py-4">
                             <h3 class="text-center text-secondary-800 mb-2">零信任架構</h3>
                             <div class="text-secondary-600 d-flex">
                                 <ul class="mx-auto pl-4">
@@ -63,7 +63,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                        <div class="introduction-global-item">
+                        <div class="introduction-global-item py-4">
                             <h3 class="text-center text-secondary-800 mb-2">DevSecOps</h3>
                             <div class="text-secondary-600 d-flex">
                                 <ul class="mx-auto pl-4">
@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6 mb-3 mb-md-0">
-                        <div class="introduction-global-item">
+                        <div class="introduction-global-item py-4">
                             <h3 class="text-center text-secondary-800 mb-2">OT 資安</h3>
                             <div class="text-secondary-600 d-flex">
                                 <ul class="mx-auto pl-4">
@@ -89,7 +89,7 @@
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6">
-                        <div class="introduction-global-item">
+                        <div class="introduction-global-item py-4">
                             <h3 class="text-center text-secondary-800 mb-2">雲資安合規</h3>
                             <div class="text-secondary-600 d-flex">
                                 <ul class="mx-auto pl-4">
