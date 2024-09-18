@@ -168,30 +168,21 @@
     const [Remark] = defineField('Remark')
     // post
     const onSubmit = handleSubmit((values) => {
-        console.log(values.CompanyName)
-        // 傳遞表單數據
-        const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                CompanyName: values.CompanyName,
-                ContactName: values.ContactName,
-                Department: values.Department,
-                JobTitle: values.JobTitle,
-                ContactTel: values.ContactTel,
-                ContactEamil: values.ContactEamil,
-                ConsultingProject: values.ConsultingProject.toString(),
-                Remark: values.Remark
-            }) 
-        })
+        console.log(values)
+        // // 傳遞表單數據
+        // const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(values) 
+        // })
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
-        const data = response.json()
-        console.log('Success:', data)
+        // if (!response.ok) {
+        //     throw new Error(`Error: ${response.statusText}`);
+        // }
+        // const data = response.json()
+        // console.log('Success:', data)
         
     })
 </script>
