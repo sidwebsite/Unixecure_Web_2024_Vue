@@ -175,24 +175,24 @@
             ContactTel: values.ContactTel,
             Department: values.Department,
             JobTitle: values.JobTitle,
-            ConsultingProject: values.ConsultingProject.string(),
+            ConsultingProject: values.ConsultingProject.String(),
             Remark: values.Remark
         }
         console.log(forms)
         // // 傳遞表單數據
-        // const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(values) 
-        // })
+        const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(forms) 
+        })
 
-        // if (!response.ok) {
-        //     throw new Error(`Error: ${response.statusText}`);
-        // }
-        // const data = response.json()
-        // console.log('Success:', data)
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        const data = response.json()
+        console.log('Success:', data)
         
     })
 </script>
