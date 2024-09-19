@@ -460,7 +460,7 @@
             background-color: var(--transparent);
             transition: var(--base-transition);
             &.active {
-                background-color: var(--primary-50);
+                background-color: var(--aboutUs-bg-color);
                 transition: var(--base-transition);
             }
         }

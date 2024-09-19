@@ -42,7 +42,7 @@
         transition: var(--base-transition);
         background-color: var(--transparent);
         &.active, &:hover {
-            background-color: var(--primary-50);
+            background-color: var(--aboutUs-bg-color);
         }
     }
 }

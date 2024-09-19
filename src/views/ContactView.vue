@@ -11,6 +11,12 @@
         Department: yup.string().required('此欄位必須選擇部門'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
         ConsultingProject: yup.array(),
+        CompilationId: yup.string(),
+        Industry: yup.string().required('此欄位必須選擇行業別'),
+        Budget: yup.string().required('此欄位必須選擇資安預算'),
+        Staffing: yup.string(),
+        Serves: yup.string(),
+        Represent: yup.string(),
         isChecked: yup.boolean(),
         Remark: yup
             .string()
@@ -31,6 +37,12 @@
             Department: '',
             JobTitle: '',
             ConsultingProject: [],
+            CompilationId: '',
+            Industry: '',
+            Budget: '',
+            Staffing: '',
+            Serves: '',
+            Represent: '',
             isChecked: false,
             Remark: ''
         },
@@ -51,8 +63,8 @@
         {text: '工程', value: '工程'},
         {text: '法務', value: '法務'}
     ]
-    // 
-    const titleOptions = [
+    // jobTitle Options
+    const jobTitleOptions = [
         {text: '執行長', value: '執行長'},
         {text: '資訊長', value: '資訊長'},
         {text: '營運長', value: '營運長'},
@@ -74,89 +86,89 @@
         {text: '行政人員', value: '行政人員'}
     ]
     // industry Options
-    // const industryOptions = [
-    //     {text: '生技', value: '生技'},
-    //     {text: '貿易百貨', value: '貿易百貨'},
-    //     {text: '個人', value: '個人'},
-    //     {text: '銀行', value: '銀行'},
-    //     {text: '證券', value: '證券'},
-    //     {text: '保險', value: '保險'},
-    //     {text: '金融業其他', value: '金融業其他'},
-    //     {text: '醫療', value: '醫療'},
-    //     {text: '資訊服務', value: '資訊服務'},
-    //     {text: '通信網路', value: '通信網路'},
-    //     {text: '教育服務', value: '教育服務'},
-    //     {text: '政府機關', value: '政府機關'},
-    //     {text: '半導體業', value: '半導體業'},
-    //     {text: '電腦週邊', value: '電腦週邊'},
-    //     {text: '光電業', value: '光電業'},
-    //     {text: '電子零組件', value: '電子零組件'},
-    //     {text: '汽車工業', value: '汽車工業'},
-    //     {text: '製造業其他', value: '製造業其他'},
-    //     {text: '鋼鐵工業', value: '鋼鐵工業'},
-    //     {text: '造紙工業', value: '造紙工業'},
-    //     {text: '塑膠工業', value: '塑膠工業'},
-    //     {text: '化學工業', value: '化學工業'},
-    //     {text: '紡織纖維', value: '紡織纖維'},
-    //     {text: '電機機械', value: '電機機械'},
-    //     {text: '食品工業', value: '食品工業'},
-    //     {text: '運輸', value: '運輸'},
-    //     {text: '電子通路', value: '電子通路'},
-    //     {text: '觀光餐飲', value: '觀光餐飲'},
-    //     {text: '專業服務', value: '專業服務'},
-    //     {text: '建材營造', value: '建材營造'},
-    //     {text: '水電/石油/燃氣供應業', value: '水電/石油/燃氣供應業'},
-    //     {text: '礦業及士石採取業', value: '礦業及士石採取業'},
-    //     {text: '文化創意業', value: '文化創意業'},
-    //     {text: '電子商務', value: '電子商務'}
-    // ]
+    const industryOptions = [
+        {text: '生技', value: '生技'},
+        {text: '貿易百貨', value: '貿易百貨'},
+        {text: '個人', value: '個人'},
+        {text: '銀行', value: '銀行'},
+        {text: '證券', value: '證券'},
+        {text: '保險', value: '保險'},
+        {text: '金融業其他', value: '金融業其他'},
+        {text: '醫療', value: '醫療'},
+        {text: '資訊服務', value: '資訊服務'},
+        {text: '通信網路', value: '通信網路'},
+        {text: '教育服務', value: '教育服務'},
+        {text: '政府機關', value: '政府機關'},
+        {text: '半導體業', value: '半導體業'},
+        {text: '電腦週邊', value: '電腦週邊'},
+        {text: '光電業', value: '光電業'},
+        {text: '電子零組件', value: '電子零組件'},
+        {text: '汽車工業', value: '汽車工業'},
+        {text: '製造業其他', value: '製造業其他'},
+        {text: '鋼鐵工業', value: '鋼鐵工業'},
+        {text: '造紙工業', value: '造紙工業'},
+        {text: '塑膠工業', value: '塑膠工業'},
+        {text: '化學工業', value: '化學工業'},
+        {text: '紡織纖維', value: '紡織纖維'},
+        {text: '電機機械', value: '電機機械'},
+        {text: '食品工業', value: '食品工業'},
+        {text: '運輸', value: '運輸'},
+        {text: '電子通路', value: '電子通路'},
+        {text: '觀光餐飲', value: '觀光餐飲'},
+        {text: '專業服務', value: '專業服務'},
+        {text: '建材營造', value: '建材營造'},
+        {text: '水電/石油/燃氣供應業', value: '水電/石油/燃氣供應業'},
+        {text: '礦業及士石採取業', value: '礦業及士石採取業'},
+        {text: '文化創意業', value: '文化創意業'},
+        {text: '電子商務', value: '電子商務'}
+    ]
     // budget Options
-    // const budgetOptions = [
-    //     {text: '100萬以下', value: '100萬以下'},
-    //     {text: '100萬~200萬', value: '100萬~200萬'},
-    //     {text: '200萬~300萬', value: '200萬~300萬'},
-    //     {text: '300萬以上', value: '300萬以上'}
-    // ]
-    // // staffing Options
-    // const staffingOptions = [
-    //     {text: '1~3人', value: '1~3人'},
-    //     {text: '3~6人', value: '3~6人'},
-    //     {text: '6~10人', value: '6~10人'},
-    //     {text: '10人以上', value: '10人以上'}
-    // ]
-    // // serves Options
-    // const servesOptions = [
-    //     {text: '滲透測試', value: '滲透測試'},
-    //     {text: '弱點掃描', value: '弱點掃描'},
-    //     {text: 'APP 資安檢測', value: 'APP 資安檢測'},
-    //     {text: '資通安全健診', value: '資通安全健診'},
-    //     {text: '政府組態基準 GCB', value: '政府組態基準 GCB'},
-    //     {text: '資安監控維運服務-MOC', value: '資安監控維運服務-MOC'},
-    //     {text: '社交工程演練-HEIS', value: '社交工程演練-HEIS'},
-    //     {text: '電子郵件過濾-SESC', value: '電子郵件過濾-SESC'},
-    //     {text: '系統資源監測-SRMAS', value: '系統資源監測-SRMAS'},
-    //     {text: '資通安全弱點通報-SIVAS', value: '資通安全弱點通報-SIVAS'},
-    //     {text: '日誌管理系統-LUCAS', value: '日誌管理系統-LUCAS'},
-    //     {text: '資通安全威脅偵測管理-SOC', value: '資通安全威脅偵測管理-SOC'},
-    //     {text: '代理產品相關', value: '代理產品相關'},
-    //     {text: '其他', value: '其他'}
-    // ]
-    // // represent Options
-    // const representOptions = [
-    //     {text: 'CELLOPOINT', value: 'CELLOPOINT'},
-    //     {text: 'Delinea', value: 'Delinea'},
-    //     {text: 'eLock', value: 'eLock'},
-    //     {text: 'ENTRUST', value: 'ENTRUST'},
-    //     {text: 'Illumio', value: 'Illumio'},
-    //     {text: 'Invicti', value: 'Invicti'},
-    //     {text: 'NEITHNET', value: 'NEITHNET'},
-    //     {text: 'OPSWAT', value: 'OPSWAT'},
-    //     {text: 'RAPID7', value: 'RAPID7'},
-    //     {text: 'SecurityScorecard', value: 'SecurityScorecard'},
-    //     {text: 'Skyhigh', value: 'Skyhigh'},
-    //     {text: 'Tufin', value: 'Tufin'}
-    // ]
-    // 
+    const budgetOptions = [
+        {text: '100萬以下', value: '100萬以下'},
+        {text: '100萬~200萬', value: '100萬~200萬'},
+        {text: '200萬~300萬', value: '200萬~300萬'},
+        {text: '300萬以上', value: '300萬以上'}
+    ]
+    // staffing Options
+    const staffingOptions = [
+        {text: '1~3人', value: '1~3人'},
+        {text: '3~6人', value: '3~6人'},
+        {text: '6~10人', value: '6~10人'},
+        {text: '10人以上', value: '10人以上'}
+    ]
+    // serves Options
+    const servesOptions = [
+        {text: '滲透測試', value: '滲透測試'},
+        {text: '弱點掃描', value: '弱點掃描'},
+        {text: 'APP 資安檢測', value: 'APP 資安檢測'},
+        {text: '資通安全健診', value: '資通安全健診'},
+        {text: '政府組態基準 GCB', value: '政府組態基準 GCB'},
+        {text: '資安監控維運服務-MOC', value: '資安監控維運服務-MOC'},
+        {text: '社交工程演練-HEIS', value: '社交工程演練-HEIS'},
+        {text: '電子郵件過濾-SESC', value: '電子郵件過濾-SESC'},
+        {text: '系統資源監測-SRMAS', value: '系統資源監測-SRMAS'},
+        {text: '資通安全弱點通報-SIVAS', value: '資通安全弱點通報-SIVAS'},
+        {text: '日誌管理系統-LUCAS', value: '日誌管理系統-LUCAS'},
+        {text: '資通安全威脅偵測管理-SOC', value: '資通安全威脅偵測管理-SOC'},
+        {text: '代理產品相關', value: '代理產品相關'},
+        {text: '其他', value: '其他'}
+    ]
+    // represent Options
+    const representOptions = [
+        {text: 'CELLOPOINT', value: 'CELLOPOINT'},
+        {text: 'Delinea', value: 'Delinea'},
+        {text: 'eLock', value: 'eLock'},
+        {text: 'ENTRUST', value: 'ENTRUST'},
+        {text: 'Illumio', value: 'Illumio'},
+        {text: 'Invicti', value: 'Invicti'},
+        {text: 'NEITHNET', value: 'NEITHNET'},
+        {text: 'OPSWAT', value: 'OPSWAT'},
+        {text: 'RAPID7', value: 'RAPID7'},
+        {text: 'SecurityScorecard', value: 'SecurityScorecard'},
+        {text: 'Skyhigh', value: 'Skyhigh'},
+        {text: 'Tufin', value: 'Tufin'}
+    ]
+    // defineField
     const [ContactName] = defineField('ContactName')
     const [CompanyName] = defineField('CompanyName')
     const [ContactEamil] = defineField('ContactEamil')
@@ -164,10 +176,17 @@
     const [Department] = defineField('Department')
     const [JobTitle] = defineField('JobTitle')
     const [ConsultingProject] = defineField('ConsultingProject')
+    const [CompilationId] = defineField('CompilationId')
+    const [Industry] = defineField('Industry')
+    const [Budget] = defineField('Budget')
+    const [Staffing] = defineField('Staffing')
+    const [Serves] = defineField('Serves')
+    const [Represent] = defineField('Represent')
     const [isChecked] = defineField('isChecked')
     const [Remark] = defineField('Remark')
     // post
     const onSubmit = handleSubmit((values) => {
+
         const forms = {
             ContactName: values.ContactName,
             CompanyName: values.CompanyName,
@@ -178,8 +197,7 @@
             ConsultingProject: values.ConsultingProject.toString(),
             Remark: values.Remark
         }
-        console.log(forms)
-        // // 傳遞表單數據
+        // 傳遞表單數據
         const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
             method: 'POST',
             headers: {
@@ -191,9 +209,9 @@
         if (!response.ok) {
             throw new Error(`Error: ${response.statusText}`);
         }
-        const data = response.json()
-        console.log('Success:', data)
-        
+        response.then(res => res.json())
+        console.log('Success:', response.then(res => res.json()))
+        response.catch(error => console.log(error))
     })
 </script>
 
@@ -253,51 +271,57 @@
                                 <label for="JobTitle" class="form-label"><span>*</span>職務</label>
                                 <select id="JobTitle" class="form-select" v-model="JobTitle" name="JobTitle">
                                     <option disabled value="">請選擇職務</option>
-                                    <option :value="item.value" v-for="item in titleOptions" :key="item.text">{{ item.text }}</option>
+                                    <option :value="item.value" v-for="item in jobTitleOptions" :key="item.text">{{ item.text }}</option>
                                 </select>
                                 <span class="text-alarm">{{ errors.JobTitle }}</span>
                             </div>
                         </div>
-                        <!-- <div class="col-md-6 mb-4">
-                            <label for="FormCompilationId" class="form-label">公司統一編號</label>
-                            <input type="text" class="form-control" id="FormCompilationId" name="FormCompilationId" placeholder="請輸入公司統一編號" />
+                        <div class="col-md-6 mb-4">
+                            <label for="CompilationId" class="form-label">公司統一編號</label>
+                            <input type="text" class="form-control" id="CompilationId" v-model="CompilationId" name="CompilationId" placeholder="請輸入公司統一編號" />
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="FormIndustry" class="form-label"><span>*</span>行業別</label>
-                            <select class="form-select" id="FormIndustry" name="FormIndustry">
-                                <option disabled value="">請選擇行業別</option>
-                                <option :value="item.value" v-for="item in industryOptions" :key="item.text">{{ item.text }}</option>
-                            </select>
-                        </div> -->
-                        <!-- <div class="col-md-6 mb-4">
-                            <label for="FormBudget" class="form-label"><span>*</span>資安預算</label>
-                            <select class="form-select" id="FormBudget" name="FormBudget">
-                                <option disabled value="">請選擇資安預算</option>
-                                <option :value="item.value" v-for="item in budgetOptions" :key="item.text">{{ item.text }}</option>
-                            </select>
-                        </div> -->
-                        <!-- <div class="col-md-6 mb-4">
-                            <label for="FormStaffing" class="form-label">貴公司資安專責人編制</label>
-                            <select class="form-select" id="FormStaffing" name="FormStaffing">
+                            <div :class="{'requiredField' : errors.Industry}">
+                                <label for="Industry" class="form-label"><span>*</span>行業別</label>
+                                <select class="form-select" id="Industry" v-model="Industry" name="Industry">
+                                    <option disabled value="">請選擇行業別</option>
+                                    <option :value="item.value" v-for="item in industryOptions" :key="item.text">{{ item.text }}</option>
+                                </select>
+                                <span class="text-alarm">{{ errors.Industry }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div :class="{'requiredField' : errors.Budget}">
+                                <label for="Budget" class="form-label"><span>*</span>資安預算</label>
+                                <select class="form-select" id="Budget" v-model="Budget" name="Budget">
+                                    <option disabled value="">請選擇資安預算</option>
+                                    <option :value="item.value" v-for="item in budgetOptions" :key="item.text">{{ item.text }}</option>
+                                </select>
+                                <span class="text-alarm">{{ errors.Budget }}</span>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <label for="Staffing" class="form-label">貴公司資安專責人編制</label>
+                            <select class="form-select" id="Staffing" v-model="Staffing" name="Staffing">
                                 <option disabled value="">請選擇</option>
                                 <option :value="item.value" v-for="item in staffingOptions" :key="item.text">{{ item.text }}</option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="col-12 mb-3 fs-6">諮詢項目</div>
-                        <!-- <div class="col-md-6 mb-3">
-                            <label for="FormServes" class="form-label">資安法相關</label>
-                            <select class="form-select" id="FormServes" name="FormServes">
+                        <div class="col-md-6 mb-3">
+                            <label for="Serves" class="form-label">資安法相關</label>
+                            <select class="form-select" id="Serves" v-model="Serves" name="Serves">
                                 <option disabled value="" >請選擇資安法相關</option>
                                 <option :value="item.value" v-for="item in servesOptions" :key="item.text">{{ item.text }}</option>
                             </select>
-                        </div> -->
-                        <!-- <div class="col-md-6 mb-3">
-                            <label for="FormRepresent" class="form-label">代理產品</label>
-                            <select class="form-select" id="FormRepresent" name="FormRepresent">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="Represent" class="form-label">代理產品</label>
+                            <select class="form-select" id="Represent" v-model="Represent" name="Represent">
                                 <option disabled value="" >請選擇代理產品</option>
                                 <option :value="item.value" v-for="item in representOptions" :key="item.text">{{ item.text }}</option>
                             </select>
-                        </div> -->
+                        </div>
                         <div class="col-12 mb-4">
                             <div class="form-check form-check-inline mb-3">
                                 <input class="form-check-input" type="checkbox" id="FormItem1" v-model="ConsultingProject" value="詢問產品價格" name="ConsultingProject" />
