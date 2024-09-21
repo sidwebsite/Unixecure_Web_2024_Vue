@@ -17,13 +17,13 @@
             <div class="col-lg-4 col-md-6">
                 <div class="select">
                     <label>時間</label>
-                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOptino"></v-select>
+                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOption"></v-select>
                 </div>
             </div>
             <div class="col-lg-4 col-md-6">
                 <div class="select">
                     <label>產品</label>
-                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOptino"></v-select>
+                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOption"></v-select>
                 </div>
             </div>
             <div class="col-lg-4">
@@ -57,6 +57,7 @@
                     </div>
                 </div>
             </router-link>
+            <p class="text-alarm text-center" v-show="searching.length === 0">沒有符合的資料。</p>
         </div>
         <!-- lists end -->
         <!-- pagination start -->
@@ -79,9 +80,9 @@
                 paginationLimit: 5,
                 pageInit: 1,
                 pageCount: 0,
-                dateTimeOptino: '',
-                productOptino: '',
-                searchWords: ''
+                dateTimeOption: '',
+                productOption: '',
+                searchWords: '',
             }
         },
         components: {
@@ -92,11 +93,12 @@
         },
         computed: {
             searching() {
-                if(!this.searchWords && this.dateTimeOptino === '' && this.productOptino === '') {
-                    return this.data
-                } else {
-                    return this.data.filter(item => item.Name.includes(this.searchWords) && item.DataTime.includes(this.dateTimeOptino) && item.Tag !== null ? item.Tag.join().includes(this.productOptino) : false);
-                }
+                return this.data.filter(item => {
+                    const matchesName = item.Name.includes(this.searchWords) || item.Profile.includes(this.searchWords) || this.filterByData(this.searchWords, this.data)
+                    const matchesDateTime = item.DataTime.includes(this.dateTimeOption) || this.filterByData(this.dateTimeOption, this.data)
+                    const matchesTag = this.productOption === null ? this.data : item.Tag !== null ? item.Tag.join().includes(this.productOption) : false || this.filterByData(this.productOption, this.data)
+                    return matchesName && matchesDateTime && matchesTag
+                })
             },
             displayData () {
                 return this.searching.slice((this.pageInit - 1) * this.paginationLimit, this.paginationLimit * this.pageInit)
@@ -135,6 +137,9 @@
             },
         },
         methods: {
+            filterByData(keywords, dataEange) {
+                if(keywords === '' || keywords === null) return dataEange
+            },
             getData() {
                 this.data = news.news
             },

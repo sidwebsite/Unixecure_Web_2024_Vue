@@ -20,8 +20,10 @@
         <!--  -->
         <main class="main">
             <router-view v-slot="{ Component, route }">
-                <transition name="fade">
-                    <component :is="Component" :key="route.path" />
+                <transition name="fade" mode="out-in">
+                    <div :key="route.path" >
+                        <component :is="Component" />
+                    </div>
                 </transition>
             </router-view>
         </main>
@@ -75,7 +77,7 @@
 <style lang="css">
     .fade-enter-active,
     .fade-leave-active {
-        transition: opacity 0.5s ease;
+        transition: opacity 0.3s ease;
     }
 
     .fade-enter-from,

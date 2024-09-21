@@ -50,6 +50,7 @@
                         </div>
                     </router-link>
                 </div>
+                <p class="text-alarm text-center" v-show="searching.length === 0">沒有符合的資料。</p>
             </div>
             <!-- pagination start -->
             <div class="text-center">
@@ -85,11 +86,11 @@
         },
         computed: {
             searching() {
-                if(!this.searchWords && this.brandOption === null) {
-                    return this.data
-                } else {
-                    return this.data.filter(item => item.Name.includes(this.searchWords) && item.product.includes(this.brandOption));
-                }
+                return this.data.filter(item => {
+                    const matchesName = item.Name.includes(this.searchWords) || this.filterByData(this.searchWords, this.data)
+                    const matchesBrand = item.product.includes(this.brandOption) || this.filterByData(this.brandOption, this.data)
+                    return matchesName && matchesBrand
+                })
             },
             displayData() {
                 return this.searching.slice((this.pageInit - 1) * this.paginationLimit, this.paginationLimit * this.pageInit)
@@ -114,6 +115,9 @@
             },
         },
         methods: {
+            filterByData(keywords, dataEange) {
+                if(keywords === '' || keywords === null) return dataEange
+            },
             getData() {
                 this.data = contract
             },

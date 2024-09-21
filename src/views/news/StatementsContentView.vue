@@ -46,7 +46,7 @@
                         </div>
                         <div>
                             <figure class="statements-img text-center">
-                                <img :src="`../pic/statements/${picDownloadPath}`" alt="">
+                                <img :src="`pic/statements/${picDownloadPath}`" alt="">
                             </figure>
                         </div>
                     </div>

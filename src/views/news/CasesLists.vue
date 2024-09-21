@@ -23,19 +23,19 @@
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>時間</label>
-                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOptino"></v-select>
+                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOption"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>產品</label>
-                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOptino"></v-select>
+                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOption"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>產業別</label>
-                    <v-select :options="industryOptions" placeholder="所有產業" v-model="industryOptino"></v-select>
+                    <v-select :options="industryOptions" placeholder="所有產業" v-model="industryOption"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
@@ -74,6 +74,7 @@
                     </div>
                 </div>
             </router-link>
+            <p class="text-alarm text-center" v-show="searching.length === 0">沒有符合的資料。</p>
         </div>
         <!-- lists end -->
         <!-- pagination start -->
@@ -98,9 +99,9 @@
                 paginationLimit: 5,
                 pageInit: 1,
                 pageCount: 0,
-                dateTimeOptino: '',
-                industryOptino: '',
-                productOptino: '',
+                dateTimeOption: '',
+                industryOption: '',
+                productOption: '',
                 searchWords: ''
             }
         },
@@ -112,11 +113,13 @@
         },
         computed: {
             searching() {
-                if(!this.searchWords && this.dateTimeOptino === '' && this.productOptino === '' && this.industryOptino === '') {
-                    return this.data
-                } else {
-                    return this.data.filter(item => item.Name.includes(this.searchWords) && item.DataTime.includes(this.dateTimeOptino) && item.Tag.join().includes(this.productOptino) && item.Industry.includes(this.industryOptino));
-                }
+                return this.data.filter(item => {
+                    const matchesName = item.Name.includes(this.searchWords) || item.Profile.includes(this.searchWords) || this.filterByData(this.searchWords, this.data)
+                    const matchesDateTime = item.DataTime.includes(this.dateTimeOption) || this.filterByData(this.dateTimeOption, this.data)
+                    const matchesTag = this.productOption === null ? this.data : item.Tag !== null ? item.Tag.join().includes(this.productOption) : false || this.filterByData(this.productOption, this.data)
+                    const matchesIndustry = item.Industry.includes(this.industryOption) || this.filterByData(this.industryOption, this.data)
+                    return matchesName && matchesDateTime && matchesTag && matchesIndustry
+                })
             },
             displayData () {
                 return this.searching.slice((this.pageInit - 1) * this.paginationLimit, this.paginationLimit * this.pageInit)
@@ -163,6 +166,9 @@
             },
         },
         methods: {
+            filterByData(keywords, dataEange) {
+                if(keywords === '' || keywords === null) return dataEange
+            },
             getData() {
                 this.data = news.cases
             },
