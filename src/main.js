@@ -2,7 +2,8 @@ import './assets/scss/style.scss'
 
 import { createApp, h } from 'vue'
 import { createPinia } from 'pinia'
-// import { VueReCaptcha } from 'vue-recaptcha-v3'
+import VueSweetalert2 from 'vue-sweetalert2';
+import 'sweetalert2/dist/sweetalert2.min.css';
 import App from './App.vue'
 import router from './router'
 import vSelect from "vue-select";
@@ -19,10 +20,9 @@ app.use(createPinia())
 app.use(router)
 app.component("v-select", vSelect);
 app.use(VueSocials)
-// app.use(VueReCaptcha, {
-//     siteKey: '6LdTX84eAAAAAK-EU8pB4R9dftS50ye-yo8I8Y7_',
-//     loaderOptions: {
-//         useRecaptchaNet: true
-//     }
-// });
+const options = {
+    confirmButtonColor: '#303878',
+    cancelButtonColor: '#303878',
+};
+app.use(VueSweetalert2, options);
 app.mount('#app')

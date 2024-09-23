@@ -1,6 +1,9 @@
 <script setup>
+    import { ref } from 'vue';
     import { useForm } from 'vee-validate'
     import * as yup from 'yup';
+    import Swal from 'sweetalert2'
+    import Recaptcha from '../components/RecaptchaComponents.vue'
 
     const validationSchema = yup.object({
         ContactName: yup.string().required('此欄位不能為空白'),
@@ -10,7 +13,7 @@
         Department: yup.string().required('此欄位必須選擇部門'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
         ConsultingProject: yup.array(),
-        CompilationId: yup.number(),
+        CompilationId: yup.string(),
         Industry: yup.string().required('此欄位必須選擇行業別'),
         Budget: yup.string().required('此欄位必須選擇資安預算'),
         Staffing: yup.string(),
@@ -177,39 +180,78 @@
         {text: 'RAPID7', value: 'RAPID7'},
         {text: 'Tufin', value: 'Tufin'}
     ]
+    // recaptcha
+    const recaptchaVerified = ref(false);
+    const recaptchaToken = ref('');
+
+    const onRecaptchaVerified = (token) => {
+        recaptchaToken.value = token;
+        recaptchaVerified.value = true;
+    };
+
+    const onRecaptchaExpired = () => {
+        recaptchaToken.value = '';
+        recaptchaVerified.value = false;
+    };
+    // 
     const onSubmit = handleSubmit((values) => {
         const forms = {
-            ContactName: values.ContactName,
             CompanyName: values.CompanyName,
-            ContactEmail: values.ContactEmail,
-            ContactTel: values.ContactTel,
+            ContactName: values.ContactName,
             Department: values.Department,
+            JobTitle: values.JobTitle,
+            ContactTel: values.ContactTel,
+            ContactEmail: values.ContactEmail,
             Industry: values.Industry,
             CompilationId: values.CompilationId,
-            JobTitle: values.JobTitle,
             Budget: values.Budget,
             Staffing: values.Staffing,
             Serves: values.Serves,
             Represent: values.Represent,
             ConsultingProject: values.ConsultingProject.join(','),
-            Remark: values.Remark
+            Remark: values.Remark,
+            gtp: recaptchaVerified.value
         }
-        console.log(forms)
+        console.log(JSON.stringify(forms) )
+        // 處理表單提交
+        if (!recaptchaVerified.value) {
+            // alert('請完成 reCAPTCHA 驗證');
+            Swal.fire({
+                title: '錯誤',
+                text: '請完成 reCAPTCHA 驗證',
+                icon: 'error',
+                confirmButtonText: '確定',
+            });
+        }
         // 傳遞表單數據
-        // const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: forms
-        // })
+        const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(forms) 
+        })
 
-        // if (!response.ok) {
-        //     throw new Error(`Error: ${response.statusText}`);
-        // }
-        // response.then(res => res.json())
+        if (!response.ok) {
+            throw new Error(`Error: ${response.statusText}`);
+        }
+        response.then(res => res.json())
+        if(response.status === 200) {
+            Swal.fire({
+                text: '表單送出成功',
+                icon: 'success',
+                confirmButtonText: '確定',
+            });
+        } else {
+            Swal.fire({
+                text: '表單送出失敗',
+                icon: 'error',
+                confirmButtonText: '確定',
+            });
+        }
+        
         // console.log('Success:', response.then(res => res.json()))
-        // response.catch(error => console.log(error))
+        response.catch(error => console.log(error))
     })
 </script>
 
@@ -346,6 +388,9 @@
                                 <textarea class="form-control" v-model="Remark" name="Remark" rows="3" placeholder="請輸入其他諮詢項目" :disabled="!ConsultingProject.includes('5')"></textarea>
                                 <span class="text-alarm">{{ errors.Remark }}</span>
                             </div>
+                        </div>
+                        <div class="col-12 mb-6">
+                            <Recaptcha @verified="onRecaptchaVerified" @expired="onRecaptchaExpired" />
                         </div>
                         <div class="col-12">
                             <div class="text-center mb-4">

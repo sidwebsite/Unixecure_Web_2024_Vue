@@ -1,6 +1,9 @@
 <script setup>
+    import { ref } from 'vue';
     import { useForm } from 'vee-validate'
     import * as yup from 'yup';
+    import Swal from 'sweetalert2'
+    import Recaptcha from '../RecaptchaComponents.vue'
     // 
     const validationSchema = yup.object({
         Name: yup.string().required('此欄位不能為空白'),
@@ -9,7 +12,7 @@
         Tel: yup.string().min(7, '請輸入正確電話格式').matches(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-#\s\\./0-9]*$/g, '請輸入正確電話格式').required('此欄位不能為空白'),
         Department: yup.string().required('此欄位不能為空白'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
-        CompilationId: yup.number(),
+        CompilationId: yup.string(),
         Industry: yup.string().required('此欄位必須選擇行業別'),
         Budget: yup.string(),
         Staffing: yup.string(),
@@ -31,7 +34,7 @@
             then: validationSchema => validationSchema.required('此欄位不能為空白'),
             otherwise: validationSchema => validationSchema.notRequired(),
         }),
-        Agree: yup.bool()
+        Agree: yup.boolean()
     })
     // 
     const { handleSubmit, defineField, errors } = useForm({
@@ -190,6 +193,19 @@
         {text: '香港', value: '24'},
         {text: '其他', value: '25'},
     ]
+    // recaptcha
+    const recaptchaVerified = ref(false);
+    const recaptchaToken = ref('');
+
+    const onRecaptchaVerified = (token) => {
+        recaptchaToken.value = token;
+        recaptchaVerified.value = true;
+    };
+
+    const onRecaptchaExpired = () => {
+        recaptchaToken.value = '';
+        recaptchaVerified.value = false;
+    };
     // post 
     const onSubmit = handleSubmit((values) => {
         const forms = {
@@ -208,27 +224,60 @@
             SalesName: values.SalesName,
             ElseInformationChannel: values.ElseInformationChannel,
             Issue: values.Issue.join(','),
-            ElseIssue: values.ElseIssue
+            ElseIssue: values.ElseIssue,
+            gtp: recaptchaVerified.value
         }
-        if (!values.Agree) {
-            alert("請先同意條款才能提交");
-            return;
-        } else  {
-            console.log(forms)
-            // const response = fetch('https://10.13.202.198:7070/api/white_papers/insert', {
-            //     method: 'POST',
-            //     headers: {
-            //         'Content-Type': 'application/json',
-            //     },
-            //     body: forms
-            // })
+        
+         // 處理表單提交
+        if (!recaptchaVerified.value) {
+            // alert('請完成 reCAPTCHA 驗證');
+            Swal.fire({
+                title: '錯誤',
+                text: '請完成 reCAPTCHA 驗證',
+                icon: 'error',
+                confirmButtonText: '確定',
+            });
+        } 
 
-            // if (!response.ok) {
-            //     throw new Error(`Error: ${response.statusText}`);
-            // }
-            // response.then(res => res.json())
+        if(!values.Agree) {
+            // alert("請先同意條款才能提交");
+            Swal.fire({
+                title: '警告',
+                text: '請先同意條款才能提交',
+                icon: 'warning',
+                confirmButtonText: '確定',
+            });
+            return
+        } else {
+            console.log(JSON.stringify(forms))
+            const response = fetch('https://10.13.202.198:7070/api/white_papers/insert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(forms) 
+            })
+
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`)
+            }
+            response.then(res => res.json())
+            if(response.status === 200) {
+                Swal.fire({
+                    text: '表單送出成功',
+                    icon: 'success',
+                    confirmButtonText: '確定',
+                });
+            } else {
+                Swal.fire({
+                    text: '表單送出失敗',
+                    icon: 'error',
+                    confirmButtonText: '確定',
+                });
+            }
             // console.log('Success:', response.then(res => res.json()))
-            // response.catch(error => console.log(error))
+
+            response.catch(error => console.log(error))
         }
     })
 </script>
@@ -419,6 +468,11 @@
                 </div>
                 <RouterLink to="/copyright" class="text-decoration-none mb-0">客戶隱私權政策</RouterLink>
                 <span class="text-alarm">*</span>
+            </div>
+            <div class="mb-5">
+                <Recaptcha 
+                @verified="onRecaptchaVerified" 
+                @expired="onRecaptchaExpired" />
             </div>
             <!--  -->
             <div class="text-center">
