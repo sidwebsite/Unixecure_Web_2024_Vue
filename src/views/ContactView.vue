@@ -13,10 +13,10 @@
         Department: yup.string().required('此欄位必須選擇部門'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
         ConsultingProject: yup.array(),
-        CompilationId: yup.string(),
+        CompilationId: yup.string().matches(/^\d{8}$/, '請輸入正確的統一編號').required('此欄位不能為空白'),
         Industry: yup.string().required('此欄位必須選擇行業別'),
         Budget: yup.string().required('此欄位必須選擇資安預算'),
-        Staffing: yup.string(),
+        Staffing: yup.string().required('此欄位必須選擇資安專責人編制'),
         Serves: yup.string(),
         Represent: yup.string(),
         Remark: yup.string().when('ConsultingProject', {
@@ -26,7 +26,7 @@
         })
     })
     // 
-    const { handleSubmit, defineField, errors } = useForm({
+    const { handleSubmit, resetForm, defineField, errors } = useForm({
         validationSchema,
         initialValues: {
             ContactName: '',
@@ -210,48 +210,54 @@
             Represent: values.Represent,
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
-            gtp: recaptchaVerified.value
+            // gtp: recaptchaToken.value
         }
-        console.log(JSON.stringify(forms) )
+        // 提交成功後清空表單
+        Swal.fire({
+            text: '表單送出成功',
+            icon: 'success',
+            confirmButtonText: '確定',
+            preConfirm: () => {
+                console.log(JSON.stringify(forms))
+                resetForm();
+            }
+        });
         // 處理表單提交
-        if (!recaptchaVerified.value) {
-            // alert('請完成 reCAPTCHA 驗證');
-            Swal.fire({
-                title: '錯誤',
-                text: '請完成 reCAPTCHA 驗證',
-                icon: 'error',
-                confirmButtonText: '確定',
-            });
-        }
+        // if (!recaptchaVerified.value) {
+        //     Swal.fire({
+        //         title: '錯誤',
+        //         text: '請完成 reCAPTCHA 驗證',
+        //         icon: 'error',
+        //         confirmButtonText: '確定',
+        //     });
+        // }
         // 傳遞表單數據
-        const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(forms) 
-        })
+        // const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify(forms) 
+        // })
 
-        if (!response.ok) {
-            throw new Error(`Error: ${response.statusText}`);
-        }
-        response.then(res => res.json())
-        if(response.status === 200) {
-            Swal.fire({
-                text: '表單送出成功',
-                icon: 'success',
-                confirmButtonText: '確定',
-            });
-        } else {
-            Swal.fire({
-                text: '表單送出失敗',
-                icon: 'error',
-                confirmButtonText: '確定',
-            });
-        }
-        
-        // console.log('Success:', response.then(res => res.json()))
-        response.catch(error => console.log(error))
+        // if (!response.ok) {
+        //     throw new Error(`Error: ${response.statusText}`);
+        // }
+        // response.then(res => res.json())
+        // if(response.status === 200) {
+        //     Swal.fire({
+        //         text: '表單送出成功',
+        //         icon: 'success',
+        //         confirmButtonText: '確定',
+        //     });
+        // } else {
+        //     Swal.fire({
+        //         text: '表單送出失敗',
+        //         icon: 'error',
+        //         confirmButtonText: '確定',
+        //     });
+        // }
+        // response.catch(error => console.log(error))
     })
 </script>
 
@@ -317,9 +323,11 @@
                             </div>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label for="CompilationId" class="form-label">公司統一編號</label>
-                            <input type="number" class="form-control" id="CompilationId" v-model.number="CompilationId" name="CompilationId" placeholder="請輸入公司統一編號" />
-                            <span class="text-alarm">{{ errors.CompilationId }}</span>
+                            <div :class="{'requiredField' : errors.CompilationId}">
+                                <label for="CompilationId" class="form-label"><span>*</span>公司統一編號</label>
+                                <input type="number" class="form-control" id="CompilationId" v-model="CompilationId" name="CompilationId" placeholder="請輸入公司統一編號" />
+                                <span class="text-alarm">{{ errors.CompilationId }}</span>
+                            </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div :class="{'requiredField' : errors.Industry}">
@@ -342,11 +350,14 @@
                             </div>
                         </div>
                         <div class="col-md-6 mb-4">
-                            <label for="Staffing" class="form-label">貴公司資安專責人編制</label>
-                            <select class="form-select" id="Staffing" v-model="Staffing" name="Staffing">
-                                <option disabled value="">請選擇</option>
-                                <option :value="item.value" v-for="item in staffingOptions" :key="item.text">{{ item.text }}</option>
-                            </select>
+                            <div :class="{'requiredField' : errors.Staffing}">
+                                <label for="Staffing" class="form-label"><span>*</span>貴公司資安專責人編制</label>
+                                <select class="form-select" id="Staffing" v-model="Staffing" name="Staffing">
+                                    <option disabled value="">請選擇資安專責人編制</option>
+                                    <option :value="item.value" v-for="item in staffingOptions" :key="item.text">{{ item.text }}</option>
+                                </select>
+                                <span class="text-alarm">{{ errors.Staffing }}</span>
+                            </div>
                         </div>
                         <div class="col-12 mb-3 fs-6">諮詢項目</div>
                         <div class="col-md-6 mb-3">

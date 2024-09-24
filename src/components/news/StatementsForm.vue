@@ -8,15 +8,15 @@
     const validationSchema = yup.object({
         Name: yup.string().required('此欄位不能為空白'),
         CompanyName: yup.string().required('此欄位不能為空白'),
-        Email: yup.string().required('此欄位不能為空白'),
+        Email: yup.string().email('請輸入正確電子信箱格式').required('此欄位不能為空白'),
         Tel: yup.string().min(7, '請輸入正確電話格式').matches(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-#\s\\./0-9]*$/g, '請輸入正確電話格式').required('此欄位不能為空白'),
         Department: yup.string().required('此欄位不能為空白'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
-        CompilationId: yup.string(),
+        CompilationId: yup.string().matches(/^\d{8}$/, '請輸入正確的8位數字').required('此欄位不能為空白'),
         Industry: yup.string().required('此欄位必須選擇行業別'),
-        Budget: yup.string(),
-        Staffing: yup.string(),
-        Area: yup.string(),
+        Budget: yup.string().required('此欄位必須選擇資安預算'),
+        Staffing: yup.string().required('此欄位必須選擇資安專責人編制'),
+        Area: yup.string().required('此欄位必須選擇地區'),
         InformationChannel: yup.array().min(1, '訊息得知管道至少選擇一項'),
         SalesName: yup.string().when('InformationChannel', {
             is: (options) => options.includes('3'),
@@ -24,20 +24,20 @@
             otherwise: validationSchema => validationSchema.notRequired(),
         }),
         ElseInformationChannel: yup.string().when('InformationChannel', {
-            is: (options) => options.includes('0'),
+            is: (options) => options.includes('6'),
             then: validationSchema => validationSchema.required('此欄位不能為空白'),
             otherwise: validationSchema => validationSchema.notRequired(),
         }),
         Issue: yup.array().min(1, '有興趣的議題至少選擇一項'),
         ElseIssue: yup.string().when('Issue', {
-            is: (options) => options.includes('0'),
+            is: (options) => options.includes('7'),
             then: validationSchema => validationSchema.required('此欄位不能為空白'),
             otherwise: validationSchema => validationSchema.notRequired(),
         }),
         Agree: yup.boolean()
     })
     // 
-    const { handleSubmit, defineField, errors } = useForm({
+    const { handleSubmit, resetForm, defineField, errors } = useForm({
         validationSchema,
         initialValues: {
             Name: '',
@@ -56,7 +56,8 @@
             ElseInformationChannel: '',
             Issue: [],
             ElseIssue: '',
-            Agree: false
+            Agree: false,
+            // gtp: recaptchaToken.value
         }
     })
     // defineField
@@ -225,12 +226,11 @@
             ElseInformationChannel: values.ElseInformationChannel,
             Issue: values.Issue.join(','),
             ElseIssue: values.ElseIssue,
-            gtp: recaptchaVerified.value
+            // gtp: recaptchaVerified.value
         }
         
          // 處理表單提交
         if (!recaptchaVerified.value) {
-            // alert('請完成 reCAPTCHA 驗證');
             Swal.fire({
                 title: '錯誤',
                 text: '請完成 reCAPTCHA 驗證',
@@ -240,7 +240,6 @@
         } 
 
         if(!values.Agree) {
-            // alert("請先同意條款才能提交");
             Swal.fire({
                 title: '警告',
                 text: '請先同意條款才能提交',
@@ -249,7 +248,6 @@
             });
             return
         } else {
-            console.log(JSON.stringify(forms))
             const response = fetch('https://10.13.202.198:7070/api/white_papers/insert', {
                 method: 'POST',
                 headers: {
@@ -263,6 +261,8 @@
             }
             response.then(res => res.json())
             if(response.status === 200) {
+                // 提交成功後清空表單
+                resetForm()
                 Swal.fire({
                     text: '表單送出成功',
                     icon: 'success',
@@ -275,8 +275,6 @@
                     confirmButtonText: '確定',
                 });
             }
-            // console.log('Success:', response.then(res => res.json()))
-
             response.catch(error => console.log(error))
         }
     })
@@ -306,7 +304,7 @@
             <div class="mb-4 mw-380">
                 <div :class="{'requiredField' : errors.Email}">
                     <label for="FormEmail" class="form-label"><span class="text-alarm">*</span>電子信箱 Email</label>
-                    <input type="email" class="form-control" id="Email" v-model="Email" name="Email" placeholder="請輸入電子信箱 Email" />
+                    <input type="email" class="form-control" id="Email" v-model.trim="Email" name="Email" placeholder="請輸入電子信箱 Email" />
                     <span class="text-alarm">{{ errors.Email }}</span>
                 </div> 
             </div>
@@ -342,8 +340,11 @@
             </div>
             <!-- 公司統一編號 -->
             <div class="mb-4 mw-380">
-                <label for="CompilationId" class="form-label">公司統一編號</label>
-                <input type="number" class="form-control" id="CompilationId" v-model.number="CompilationId" name="CompilationId" placeholder="請輸入公司統一編號" />
+                <div :class="{'requiredField' : errors.CompilationId}">
+                    <label for="CompilationId" class="form-label"><span>*</span>公司統一編號</label>
+                    <input type="number" class="form-control" id="CompilationId" v-model="CompilationId" name="CompilationId" placeholder="請輸入公司統一編號" />
+                    <span class="text-alarm">{{ errors.CompilationId }}</span>
+                </div>
             </div>
             <!--  -->
             <div class="mb-4 mw-380">
@@ -358,27 +359,36 @@
             </div>
             <!-- 貴公司資安預算 -->
             <div class="mb-4 mw-380">
-                <label for="Budget" class="form-label">貴公司資安預算</label>
-                <select class="form-select" id="Budget" v-model="Budget" name="Budget">
-                    <option disabled value="">請選擇資安預算</option>
-                    <option :value="item.value" v-for="item in budgetOptions" :key="item.text">{{ item.text }}</option>
-                </select>
+                <div :class="{'requiredField' : errors.Budget}">
+                    <label for="Budget" class="form-label"><span>*</span>貴公司資安預算</label>
+                    <select class="form-select" id="Budget" v-model="Budget" name="Budget">
+                        <option disabled value="">請選擇資安預算</option>
+                        <option :value="item.value" v-for="item in budgetOptions" :key="item.text">{{ item.text }}</option>
+                    </select>
+                    <span class="text-alarm">{{ errors.Budget }}</span>
+                </div>
             </div>
             <!-- 貴公司資安專責人編制 -->
             <div class="mb-4 mw-380">
-                <label for="Staffing" class="form-label">貴公司資安專責人編制</label>
-                <select class="form-select" id="Staffing" v-model="Staffing" name="Staffing">
-                    <option disabled value="">請選擇</option>
-                    <option :value="item.value" v-for="item in staffingOptions" :key="item.text">{{ item.text }}</option>
-                </select>
+                <div :class="{'requiredField' : errors.Staffing}">
+                    <label for="Staffing" class="form-label"><span>*</span>貴公司資安專責人編制</label>
+                    <select class="form-select" id="Staffing" v-model="Staffing" name="Staffing">
+                        <option disabled value="">請選擇資安專責人編制</option>
+                        <option :value="item.value" v-for="item in staffingOptions" :key="item.text">{{ item.text }}</option>
+                    </select>
+                    <span class="text-alarm">{{ errors.Staffing }}</span>
+                </div>
             </div>
             <!-- 地區 -->
             <div class="mb-4 mw-380">
-                <label for="Area" class="form-label">地區</label>
-                <select class="form-select" id="Area" v-model="Area" name="Area">
-                    <option disabled value="">請選擇地區</option>
-                    <option :value="item.value" v-for="item in areaOptions" :key="item.text">{{ item.text }}</option>
-                </select>
+                <div :class="{'requiredField' : errors.Area}">
+                    <label for="Area" class="form-label"><span>*</span>地區</label>
+                    <select class="form-select" id="Area" v-model="Area" name="Area">
+                        <option disabled value="">請選擇地區</option>
+                        <option :value="item.value" v-for="item in areaOptions" :key="item.text">{{ item.text }}</option>
+                    </select>
+                    <span class="text-alarm">{{ errors.Area }}</span>
+                </div>
             </div>
             <!-- 訊息得知管道（複選） -->
             <div class="mb-4">
@@ -410,7 +420,7 @@
                 </div>
                 <!--  -->
                 <div class="form-check mb-1">
-                    <input class="form-check-input" type="checkbox" id="message6" v-model="InformationChannel" value="0" name="InformationChannel">
+                    <input class="form-check-input" type="checkbox" id="message6" v-model="InformationChannel" value="6" name="InformationChannel">
                     <label class="form-check-label" for="message6">其他</label>
                 </div>
                 <div :class="{'requiredField' : errors.ElseInformationChannel}">
@@ -451,11 +461,11 @@
                     </div>
                 </div>
                 <div class="form-check mb-1">
-                    <input class="form-check-input" type="checkbox" id="issue7" v-model="Issue" value="0" name="Issue">
+                    <input class="form-check-input" type="checkbox" id="issue7" v-model="Issue" value="7" name="Issue">
                     <label class="form-check-label" for="issue7">其他</label>
                 </div>
                 <div :class="{'requiredField' : errors.ElseIssue}">
-                    <textarea class="form-control" v-model="ElseIssue" name="ElseIssue" rows="3" placeholder="請輸入其他想了解的項目" :disabled="!Issue.includes('0')"></textarea>
+                    <textarea class="form-control" v-model="ElseIssue" name="ElseIssue" rows="3" placeholder="請輸入其他想了解的項目" :disabled="!Issue.includes('7')"></textarea>
                     <span class="text-alarm">{{ errors.ElseIssue }}</span>
                 </div>
                 <span class="text-alarm">{{ errors.Issue }}</span>
