@@ -20,19 +20,19 @@
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>時間</label>
-                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOption"></v-select>
+                    <v-select :options="dateOptions" placeholder="請選擇時間" v-model="dateTimeOption" :clearable="false"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>產品</label>
-                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOption"></v-select>
+                    <v-select :options="productOptions" placeholder="請選擇產品" v-model="productOption" :clearable="false"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>活動形式</label>
-                    <v-select :options="locationOptions" placeholder="所有形式" v-model="locationOption"></v-select>
+                    <v-select :options="locationOptions" placeholder="請選擇形式" v-model="locationOption" :clearable="false"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
@@ -96,9 +96,15 @@
                 pageCount: 0,
                 todayData: new Date().getTime(),
                 isVisible: null,
-                dateTimeOption: '',
-                productOption: '',
-                locationOption: '',
+                
+                dateTimeOption: '所有時間',
+                productOption: '所有產品',
+                locationOption: '所有形式',
+                selectInit: {
+                    dateTimeValue: '所有時間',
+                    productValue: '所有產品',
+                    locationValue: '所有形式'
+                },
                 searchWords: ''
             }
         },
@@ -112,9 +118,9 @@
             searching() {
                 return this.data.filter(item => {
                     const matchesName = item.Name.includes(this.searchWords) || this.filterByData(this.searchWords, this.data)
-                    const matchesDateTime = item.DataTime.includes(this.dateTimeOption) || this.filterByData(this.dateTimeOption, this.data)
-                    const matchesLocation = item.Location.join().includes(this.locationOption) || this.filterByData(this.locationOption, this.data)
-                    const matchesTag = this.productOption === null ? this.data : item.Tag !== null ? item.Tag.join().includes(this.productOption) : false || this.filterByData(this.productOption, this.data)
+                    const matchesDateTime = item.DataTime.includes(this.dateTimeOption) || this.filterByData(this.dateTimeOption, this.selectInit.dateTimeValue, this.data)
+                    const matchesLocation = item.Location.join().includes(this.locationOption) || this.filterByData(this.locationOption, this.selectInit.locationValue, this.data)
+                    const matchesTag = this.productOption === this.selectInit.productValue ? this.data : item.Tag !== null ? item.Tag.join().includes(this.productOption) : false || this.filterByData(this.productOption, this.selectInit.productValue, this.data)
                     return matchesName && matchesDateTime && matchesLocation && matchesTag
                 })
             },
@@ -127,6 +133,7 @@
             },
             dateOptions() {
                 const dateTime = []
+                dateTime.push(this.selectInit.dateTimeValue)
                 this.searching.forEach(item => {
                     const year = new Date(item.DataTime).getFullYear()
                     if(dateTime.indexOf(year) === -1) {
@@ -137,6 +144,7 @@
             },
             productOptions() {
                 const product = []
+                product.push(this.selectInit.productValue)
                 this.searching.forEach(item => {
                     if(item.Tag !== null) {
                         item.Tag.forEach(val => {
@@ -150,6 +158,7 @@
             },
             locationOptions() {
                 const location = []
+                location.push(this.selectInit.locationValue)
                 this.searching.forEach(item => {
                     if(item.Location !== null) {
                         item.Location.forEach(val => {
@@ -168,8 +177,8 @@
             },
         },
         methods: {
-            filterByData(keywords, dataEange) {
-                if(keywords === '' || keywords === null) return dataEange
+            filterByData(keywords, allValue='' || null, dataEange) {
+                if(keywords === allValue) return dataEange
             },
             getData() {
                 this.data = news.events

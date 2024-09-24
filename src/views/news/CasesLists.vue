@@ -23,19 +23,19 @@
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>時間</label>
-                    <v-select :options="dateOptions" placeholder="所有時間" v-model="dateTimeOption"></v-select>
+                    <v-select :options="dateOptions" placeholder="請選擇時間" v-model="dateTimeOption" :clearable="false"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>產品</label>
-                    <v-select :options="productOptions" placeholder="所有產品" v-model="productOption"></v-select>
+                    <v-select :options="productOptions" placeholder="請選擇產品" v-model="productOption" :clearable="false"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
                 <div class="select">
                     <label>產業別</label>
-                    <v-select :options="industryOptions" placeholder="所有產業" v-model="industryOption"></v-select>
+                    <v-select :options="industryOptions" placeholder="請選擇產業" v-model="industryOption" :clearable="false"></v-select>
                 </div>
             </div>
             <div class="col-lg-3 col-md-6">
@@ -99,9 +99,14 @@
                 paginationLimit: 5,
                 pageInit: 1,
                 pageCount: 0,
-                dateTimeOption: '',
-                industryOption: '',
-                productOption: '',
+                dateTimeOption: '所有時間',
+                industryOption: '所有產業',
+                productOption: '所有產品',
+                selectInit: {
+                    dateTimeValue: '所有時間',
+                    industryValue: '所有產業',
+                    productValue: '所有產品'
+                },
                 searchWords: ''
             }
         },
@@ -115,10 +120,10 @@
             searching() {
                 return this.data.filter(item => {
                     const matchesName = item.Name.includes(this.searchWords) || item.Profile.includes(this.searchWords) || this.filterByData(this.searchWords, this.data)
-                    const matchesDateTime = item.DataTime.includes(this.dateTimeOption) || this.filterByData(this.dateTimeOption, this.data)
-                    const matchesTag = this.productOption === null ? this.data : item.Tag !== null ? item.Tag.join().includes(this.productOption) : false || this.filterByData(this.productOption, this.data)
-                    const matchesIndustry = item.Industry.includes(this.industryOption) || this.filterByData(this.industryOption, this.data)
-                    return matchesName && matchesDateTime && matchesTag && matchesIndustry
+                    const matchesDateTime = item.DataTime.includes(this.dateTimeOption) || this.filterByData(this.dateTimeOption, this.selectInit.dateTimeValue, this.data)
+                    const matchesTag = this.productOption === this.selectInit.productValue ? this.data : item.Tag !== null ? item.Tag.join().includes(this.productOption) : false || this.filterByData(this.productOption, this.selectInit.productValue, this.data)
+                    const matchesIndustry = item.Industry.includes(this.industryOption) || this.filterByData(this.industryOption, this.selectInit.industryValue, this.data)
+                    return matchesName && matchesDateTime &&  matchesTag && matchesIndustry
                 })
             },
             displayData () {
@@ -130,6 +135,7 @@
             },
             dateOptions() {
                 const dateTime = []
+                dateTime.push(this.selectInit.dateTimeValue)
                 this.searching.forEach(item => {
                     if(dateTime.indexOf(item.DataTime) === -1) {
                         dateTime.push(item.DataTime)
@@ -139,6 +145,7 @@
             },
             productOptions() {
                 const product = []
+                product.push(this.selectInit.productValue)
                 this.searching.forEach(item => {
                     if(item.Tag !== null) {
                         item.Tag.forEach(val => {
@@ -152,6 +159,7 @@
             },
             industryOptions() {
                 const industry = []
+                industry.push(this.selectInit.industryValue)
                 this.searching.forEach(item => {
                     if(industry.indexOf(item.Industry) === -1) {
                         industry.push(item.Industry)
@@ -166,8 +174,8 @@
             },
         },
         methods: {
-            filterByData(keywords, dataEange) {
-                if(keywords === '' || keywords === null) return dataEange
+            filterByData(keywords, allValue='' || null, dataEange) {
+                if(keywords === allValue) return dataEange
             },
             getData() {
                 this.data = news.cases

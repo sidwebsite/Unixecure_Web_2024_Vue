@@ -18,7 +18,7 @@
                 <div class="col-md-6">
                     <div class="select">
                         <label>廠牌</label>
-                        <v-select :options="options" placeholder="所有廠牌" v-model="brandOption" @change="brandOption"></v-select>
+                        <v-select :options="options" placeholder="請選擇廠牌" v-model="brandOption" :clearable="false"></v-select>
                     </div>
                 </div>
                 <div class="col-md-6">
@@ -75,7 +75,10 @@
                 pageInit: 1,
                 pageCount: 0,
                 searchWords: '',
-                brandOption: ''
+                brandOption: '所有廠牌',
+                selectInit: {
+                    brandValue: '所有廠牌',
+                },
             }
         },
         components: {
@@ -88,7 +91,7 @@
             searching() {
                 return this.data.filter(item => {
                     const matchesName = item.Name.includes(this.searchWords) || this.filterByData(this.searchWords, this.data)
-                    const matchesBrand = item.product.includes(this.brandOption) || this.filterByData(this.brandOption, this.data)
+                    const matchesBrand = item.product.includes(this.brandOption) || this.filterByData(this.brandOption, this.selectInit.brandValue, this.data)
                     return matchesName && matchesBrand
                 })
             },
@@ -101,6 +104,7 @@
             },
             options() {
                 const brand = []
+                brand.push(this.selectInit.brandValue)
                 this.searching.forEach(item => {
                     if(brand.indexOf(item.product) === -1) {
                         brand.push(item.product)
@@ -115,8 +119,8 @@
             },
         },
         methods: {
-            filterByData(keywords, dataEange) {
-                if(keywords === '' || keywords === null) return dataEange
+            filterByData(keywords, allValue='' || null, dataEange) {
+                if(keywords === allValue) return dataEange
             },
             getData() {
                 this.data = contract
