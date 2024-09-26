@@ -4,15 +4,31 @@
     import * as yup from 'yup';
     import Swal from 'sweetalert2'
     import Recaptcha from '../RecaptchaComponents.vue'
+    import router from '@/router'
     // 
     const validationSchema = yup.object({
         Name: yup.string().required('此欄位不能為空白'),
         CompanyName: yup.string().required('此欄位不能為空白'),
         Email: yup.string().email('請輸入正確電子信箱格式').required('此欄位不能為空白'),
-        Tel: yup.string().min(7, '請輸入正確電話格式').matches(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-#\s\\./0-9]*$/g, '請輸入正確電話格式').required('此欄位不能為空白'),
+        Tel: yup.string()
+        .test('valid-phone', '電話號碼必須至少包含7位數字', (value) => {
+            if (!value) return false; 
+            const cleanedValue = value.split('#')[0].replace(/\D/g, ''); 
+            return cleanedValue.length >= 7; 
+        })
+        .test('has-hash', '如果有「#」號，必須填寫分機號碼', (value) => {
+            if (!value) return true; // 無需驗證空值
+            const hashIndex = value.indexOf('#');
+            if (hashIndex !== -1) {
+                // 確保#號後面有數字
+                return /\d/.test(value.slice(hashIndex + 1));
+            }
+            return true;
+        })
+        .required('此欄位不能為空白'),
         Department: yup.string().required('此欄位不能為空白'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
-        CompilationId: yup.string().matches(/^\d{8}$/, '請輸入正確的8位數字').required('此欄位不能為空白'),
+        CompilationId: yup.string().matches(/^\d{8}$/, '請輸入正確的統一編號8位數').required('此欄位不能為空白'),
         Industry: yup.string().required('此欄位必須選擇行業別'),
         Budget: yup.string().required('此欄位必須選擇資安預算'),
         Staffing: yup.string().required('此欄位必須選擇資安專責人編制'),
@@ -56,8 +72,7 @@
             ElseInformationChannel: '',
             Issue: [],
             ElseIssue: '',
-            Agree: false,
-            // gtp: recaptchaToken.value
+            Agree: false
         }
     })
     // defineField
@@ -207,7 +222,7 @@
         recaptchaToken.value = '';
         recaptchaVerified.value = false;
     };
-    // post 
+    // Submit
     const onSubmit = handleSubmit((values) => {
         const forms = {
             Name: values.Name,
@@ -226,20 +241,57 @@
             ElseInformationChannel: values.ElseInformationChannel,
             Issue: values.Issue.join(','),
             ElseIssue: values.ElseIssue,
-            // gtp: recaptchaVerified.value
+            gtp: recaptchaToken.value
         }
-        
-         // 處理表單提交
-        if (!recaptchaVerified.value) {
-            Swal.fire({
-                title: '錯誤',
-                text: '請完成 reCAPTCHA 驗證',
-                icon: 'error',
-                confirmButtonText: '確定',
-            });
-        } 
+        // 過濾掉空值
+        const filteredValues = Object.fromEntries(
+            Object.entries(forms).filter(([, value]) => value !== "")
+        );
+        // 處理表單提交
+        if(values.Agree) {
+            // reCAPTCHA 驗證
+            if(recaptchaVerified.value) {
+                const response = fetch('https://10.13.202.198:7070/api/white_papers/insert', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(filteredValues) 
+                })
 
-        if(!values.Agree) {
+                if (!response.ok) {
+                    throw new Error(`Error: ${response.statusText}`)
+                }
+                response.then(res => res.json())
+                if(response.status === 200) {
+                    // 提交成功後清空表單
+                    Swal.fire({
+                        text: '表單送出成功',
+                        icon: 'success',
+                        confirmButtonText: '確定',
+                        preConfirm: () => {
+                            resetForm()
+                            router.push({ name: 'statementsSuccess' })
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: '表單送出失敗',
+                        icon: 'error',
+                        confirmButtonText: '確定',
+                    });
+                }
+                response.catch(error => console.log(error))
+            } else {
+
+                Swal.fire({
+                    title: '錯誤',
+                    text: '請完成 reCAPTCHA 驗證',
+                    icon: 'error',
+                    confirmButtonText: '確定',
+                });
+            }
+        } else {
             Swal.fire({
                 title: '警告',
                 text: '請先同意條款才能提交',
@@ -247,35 +299,6 @@
                 confirmButtonText: '確定',
             });
             return
-        } else {
-            const response = fetch('https://10.13.202.198:7070/api/white_papers/insert', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(forms) 
-            })
-
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`)
-            }
-            response.then(res => res.json())
-            if(response.status === 200) {
-                // 提交成功後清空表單
-                resetForm()
-                Swal.fire({
-                    text: '表單送出成功',
-                    icon: 'success',
-                    confirmButtonText: '確定',
-                });
-            } else {
-                Swal.fire({
-                    text: '表單送出失敗',
-                    icon: 'error',
-                    confirmButtonText: '確定',
-                });
-            }
-            response.catch(error => console.log(error))
         }
     })
 </script>
@@ -424,7 +447,7 @@
                     <label class="form-check-label" for="message6">其他</label>
                 </div>
                 <div :class="{'requiredField' : errors.ElseInformationChannel}">
-                    <textarea class="form-control" v-model="ElseInformationChannel" name="ElseInformationChannel" rows="3" placeholder="請輸入其他得知管道" :disabled="!InformationChannel.includes('0')"></textarea>
+                    <textarea class="form-control" v-model="ElseInformationChannel" name="ElseInformationChannel" rows="3" placeholder="請輸入其他得知管道" :disabled="!InformationChannel.includes('6')"></textarea>
                     <span class="text-alarm">{{ errors.ElseInformationChannel }}</span>
                 </div>
                 <span class="text-alarm">{{ errors.InformationChannel }}</span>

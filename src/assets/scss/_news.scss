@@ -233,6 +233,9 @@
     .statements-img > img {
         box-shadow: 0px 10px 35px 0px rgba($blue-800, 0.4);
     } 
+    .statements-success-btn:hover {
+        color: var(--white) !important;
+    }
 }
 .cases-content-logo img {
     width: 111px;

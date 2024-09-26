@@ -4,16 +4,32 @@
     import * as yup from 'yup';
     import Swal from 'sweetalert2'
     import Recaptcha from '../components/RecaptchaComponents.vue'
+    import router from '@/router'
 
     const validationSchema = yup.object({
         ContactName: yup.string().required('此欄位不能為空白'),
         CompanyName: yup.string().required('此欄位不能為空白'),
         ContactEmail: yup.string().email('請輸入正確電子信箱格式').required('此欄位不能為空白'),
-        ContactTel: yup.string().min(7, '請輸入正確電話格式').matches(/^[+]*[(]{0,1}[0-9]{1,3}[)]{0,1}[-#\s\\./0-9]*$/g, '請輸入正確電話格式').required('此欄位不能為空白'),
+        ContactTel: yup.string()
+        .test('valid-phone', '電話號碼必須至少包含7位數字', (value) => {
+            if (!value) return false; 
+            const cleanedValue = value.split('#')[0].replace(/\D/g, ''); 
+            return cleanedValue.length >= 7; 
+        })
+        .test('has-hash', '如果有「#」號，必須填寫分機號碼', (value) => {
+            if (!value) return true; // 無需驗證空值
+            const hashIndex = value.indexOf('#');
+            if (hashIndex !== -1) {
+                // 確保#號後面有數字
+                return /\d/.test(value.slice(hashIndex + 1));
+            }
+            return true;
+        })
+        .required('此欄位不能為空白'),
         Department: yup.string().required('此欄位必須選擇部門'),
         JobTitle: yup.string().required('此欄位必須選擇職務'),
         ConsultingProject: yup.array(),
-        CompilationId: yup.string().matches(/^\d{8}$/, '請輸入正確的統一編號').required('此欄位不能為空白'),
+        CompilationId: yup.string().matches(/^\d{8}$/, '請輸入正確的統一編號8位數').required('此欄位不能為空白'),
         Industry: yup.string().required('此欄位必須選擇行業別'),
         Budget: yup.string().required('此欄位必須選擇資安預算'),
         Staffing: yup.string().required('此欄位必須選擇資安專責人編制'),
@@ -152,33 +168,33 @@
     ]
     // serves Options
     const servesOptions = [
-        {text: '滲透測試', value: '滲透測試'},
-        {text: '弱點掃描', value: '弱點掃描'},
-        {text: 'APP 資安檢測', value: 'APP 資安檢測'},
-        {text: '資通安全健診', value: '資通安全健診'},
-        {text: '政府組態基準 GCB', value: '政府組態基準 GCB'},
-        {text: '資安監控維運服務-MOC', value: '資安監控維運服務-MOC'},
-        {text: '社交工程演練-HEIS', value: '社交工程演練-HEIS'},
-        {text: '電子郵件過濾-SESC', value: '電子郵件過濾-SESC'},
-        {text: '系統資源監測-SRMAS', value: '系統資源監測-SRMAS'},
-        {text: '資通安全弱點通報-SIVAS', value: '資通安全弱點通報-SIVAS'},
-        {text: '日誌管理系統-LUCAS', value: '日誌管理系統-LUCAS'},
-        {text: '資通安全威脅偵測管理-SOC', value: '資通安全威脅偵測管理-SOC'},
-        {text: '代理產品相關', value: '代理產品相關'},
-        {text: '其他', value: '其他'}
+        {text: '滲透測試', value: '1'},
+        {text: '弱點掃描', value: '2'},
+        {text: 'APP 資安檢測', value: '3'},
+        {text: '資通安全健診', value: '4'},
+        {text: '政府組態基準 GCB', value: '5'},
+        {text: '資安監控維運服務-MOC', value: '6'},
+        {text: '社交工程演練-HEIS', value: '7'},
+        {text: '電子郵件過濾-SESC', value: '8'},
+        {text: '系統資源監測-SRMAS', value: '9'},
+        {text: '資通安全弱點通報-SIVAS', value: '10'},
+        {text: '日誌管理系統-LUCAS', value: '11'},
+        {text: '資通安全威脅偵測管理-SOC', value: '12'},
+        {text: '代理產品相關', value: '13'},
+        {text: '其他', value: '14'}
     ]
     // represent Options
     const representOptions = [
-        {text: 'CELLOPOINT', value: 'CELLOPOINT'},
-        {text: 'Delinea', value: 'Delinea'},
-        {text: 'eLock', value: 'eLock'},
-        {text: 'ENTRUST', value: 'ENTRUST'},
-        {text: 'Illumio', value: 'Illumio'},
-        {text: 'Invicti', value: 'Invicti'},
-        {text: 'NEITHNET', value: 'NEITHNET'},
-        {text: 'OPSWAT', value: 'OPSWAT'},
-        {text: 'RAPID7', value: 'RAPID7'},
-        {text: 'Tufin', value: 'Tufin'}
+        {text: 'CELLOPOINT', value: '1'},
+        {text: 'Delinea', value: '2'},
+        {text: 'eLock', value: '3'},
+        {text: 'ENTRUST', value: '4'},
+        {text: 'Illumio', value: '5'},
+        {text: 'Invicti', value: '6'},
+        {text: 'NEITHNET', value: '7'},
+        {text: 'OPSWAT', value: '8'},
+        {text: 'RAPID7', value: '9'},
+        {text: 'Tufin', value: '10'}
     ]
     // recaptcha
     const recaptchaVerified = ref(false);
@@ -193,7 +209,7 @@
         recaptchaToken.value = '';
         recaptchaVerified.value = false;
     };
-    // 
+    // Submit
     const onSubmit = handleSubmit((values) => {
         const forms = {
             CompanyName: values.CompanyName,
@@ -202,62 +218,63 @@
             JobTitle: values.JobTitle,
             ContactTel: values.ContactTel,
             ContactEmail: values.ContactEmail,
-            Industry: values.Industry,
             CompilationId: values.CompilationId,
+            Industry: values.Industry,
             Budget: values.Budget,
             Staffing: values.Staffing,
             Serves: values.Serves,
             Represent: values.Represent,
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
-            // gtp: recaptchaToken.value
+            gtp: recaptchaToken.value
         }
-        // 提交成功後清空表單
-        Swal.fire({
-            text: '表單送出成功',
-            icon: 'success',
-            confirmButtonText: '確定',
-            preConfirm: () => {
-                console.log(JSON.stringify(forms))
-                resetForm();
-            }
-        });
+        // 過濾掉空值
+        const filteredValues = Object.fromEntries(
+            Object.entries(forms).filter(([, value]) => value !== "")
+        );
         // 處理表單提交
-        // if (!recaptchaVerified.value) {
-        //     Swal.fire({
-        //         title: '錯誤',
-        //         text: '請完成 reCAPTCHA 驗證',
-        //         icon: 'error',
-        //         confirmButtonText: '確定',
-        //     });
-        // }
-        // 傳遞表單數據
-        // const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //     },
-        //     body: JSON.stringify(forms) 
-        // })
+        if (recaptchaVerified.value) {
+            // 傳遞表單數據
+            const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(filteredValues)
+            })
 
-        // if (!response.ok) {
-        //     throw new Error(`Error: ${response.statusText}`);
-        // }
-        // response.then(res => res.json())
-        // if(response.status === 200) {
-        //     Swal.fire({
-        //         text: '表單送出成功',
-        //         icon: 'success',
-        //         confirmButtonText: '確定',
-        //     });
-        // } else {
-        //     Swal.fire({
-        //         text: '表單送出失敗',
-        //         icon: 'error',
-        //         confirmButtonText: '確定',
-        //     });
-        // }
-        // response.catch(error => console.log(error))
+            if (!response.ok) {
+                throw new Error(`Error: ${response.statusText}`);
+            }
+            response.then(res => res.json())
+            // 提交成功
+            if(response.status === 200) {
+                Swal.fire({
+                    text: '聯絡我們表單成功送出',
+                    icon: 'success',
+                    confirmButtonText: '確定',
+                    preConfirm: () => {
+                        // 提交成功後清空表單
+                        resetForm();
+                        router.push({ name: 'contactSuccess' })
+                    }
+                });
+            } else {
+                Swal.fire({
+                    text: '表單送出失敗',
+                    icon: 'error',
+                    confirmButtonText: '確定',
+                });
+            }
+            response.catch(error => console.log(error))
+        } else {
+            Swal.fire({
+                title: '錯誤',
+                text: '請完成 reCAPTCHA 驗證',
+                icon: 'error',
+                confirmButtonText: '確定',
+            })
+        }
     })
 </script>
 

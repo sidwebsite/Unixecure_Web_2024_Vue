@@ -288,6 +288,11 @@ const routes = [
     component: () => import('../views/news/StatementsLists.vue')
   },
   {
+    path: '/statementsSuccess',
+    name: 'statementsSuccess',
+    component: () => import('../views/news/StatementsSuccess.vue')
+  },
+  {
     path: '/statementsContent/:statementsId',
     name: 'statementsContent',
     component: () => import('../views/news/StatementsContentView.vue')
@@ -296,6 +301,11 @@ const routes = [
     path: '/contact',
     name: 'contact',
     component: () => import('../views/ContactView.vue')
+  },
+  {
+    path: '/contactSuccess',
+    name: 'contactSuccess',
+    component: () => import('../views/ContactSuccess.vue')
   },
   // 404 頁面
   { path: '/:pathMatch(.*)*', 
