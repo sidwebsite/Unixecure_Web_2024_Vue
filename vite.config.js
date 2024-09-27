@@ -9,6 +9,7 @@ export default defineConfig({
     vue(),
   ],
   base: '/Unixecure_Web_2024_Vue/',
+  publicPath: '/Unixecure_Web_2024_Vue/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
