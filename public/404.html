@@ -4,7 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Redirecting...</title>
-    <meta http-equiv="refresh" content="0; url='/'" />
+    <script>
+        // 獲取當前路徑
+        const currentPath = window.location.pathname;
+        
+        // 獲取路由名稱（去掉前綴和尾部斜線）
+        const routeName = currentPath.replace(/^\/|\/$/g, ''); // 獲取不帶斜線的路由名稱
+
+        // 構建重定向 URL
+        const redirectTo = routeName ? `/${routeName}` : '/'; // 如果有路由名稱則重定向，否則重定向到根路徑
+
+        // 進行重定向
+        window.location.href = redirectTo;
+    </script>
 </head>
 <body>
     <p>If you are not redirected automatically, follow the <a href="/">link to the homepage</a>.</p>
