@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  base: import.meta.env.MODE === 'production' ? '/Unixecure_Web_2024_Vue/' : '/',
+  base: '/Unixecure_Web_2024_Vue/',
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))
