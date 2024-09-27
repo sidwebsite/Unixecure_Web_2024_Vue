@@ -315,7 +315,7 @@ const routes = [
 ]
 
 const router = createRouter({
-  history: createWebHistory('/Unixecure_Web_2024_Vue/'),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
   scrollBehavior(to, from, savedPosition) {
     if (savedPosition) {
