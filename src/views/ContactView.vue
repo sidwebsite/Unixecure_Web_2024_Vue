@@ -289,7 +289,8 @@
             Represent: values.Represent,
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
-            gtp: recaptchaToken.value
+            gtp: "test"
+            // gtp: recaptchaToken.value
         }
         // 過濾掉空值
         const filteredValues = Object.fromEntries(
