@@ -308,10 +308,10 @@ const routes = [
     component: () => import('../views/ContactSuccess.vue')
   },
   // 404 頁面
-  // { path: '/:pathMatch(.*)*', 
-  //   name: 'NotFound', 
-  //   component: () => import('../views/404View.vue')
-  // }
+  { path: '/:pathMatch(.*)*', 
+    name: 'NotFound', 
+    component: () => import('../views/404View.vue')
+  }
 ]
 
 const router = createRouter({
