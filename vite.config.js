@@ -7,13 +7,13 @@ import vue from '@vitejs/plugin-vue'
 export default defineConfig({
   server: {
     cors: {
-      origin: import.meta.env.VITE_API_198_URL,
+      origin: 'https://10.13.202.198:7070',
       methods: ['POST'],
       allowedHeaders: ['Content-Type', 'application/json'], 
     },
     proxy: {
       '/api': {
-        target: import.meta.env.VITE_API_198_URL,
+        target: 'https://10.13.202.198:7070',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, ''),
         configure: (proxy, options) => {
