@@ -238,10 +238,10 @@
     };
     // 正式提交表單
     const createResource = async (values) => {
-        const api = 
+        // const api = import.meta.env.VITE_API_198_URL
             console.log(values)
             try {
-                const response = await fetch(`${api}/api/contact_us/insert`, {
+                const response = await fetch('/api/contact_us/insert', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',

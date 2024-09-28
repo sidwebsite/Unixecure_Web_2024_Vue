@@ -9,14 +9,13 @@ export default defineConfig({
     cors: {
       origin: 'https://10.13.202.198:7070',
       methods: ['GET', 'POST', 'PUT'],
-      allowedHeaders: ['Content-Type', 'Authorization'], 
+      allowedHeaders: ['Content-Type', 'application/json'], 
     },
     proxy: {
-      '/data': 'https://sidwebsite.github.io/unixecure_json_server/data.json',
       '/api': {
-        target: 'https://sidwebsite.github.io/unixecure_json_server/data.json',
+        target: 'https://10.13.202.198:7070',
         changeOrigin: true,
-        secure: false,
+        rewrite: (path) => path.replace(/^\/api/, '')
       },
     },
   },
