@@ -6,11 +6,11 @@
                 <div class="col-lg-4 col-md-6 list" v-for="item in eventsData.slice(0, 3)" :key="item.Id">
                     <router-link :to="{ name: 'eventsContent', params: { eventsId: item.Id }}" :title="item.Name" class="default-card card d-flex flex-column">
                         <div class="card-img">
-                            <img :src="`pic/events/${item.picDownloadPath}`" alt="">
+                            <img :src="`../pic/events/${item.picDownloadPath}`" alt="">
                         </div>
                         <div class="card-body flex-grow-1 d-flex flex-column">
                             <ul class="card-logo d-flex">
-                                <li v-for="organizer in item.organizer" :key="organizer"><img :src="`product/${organizerPic(organizer)}.png`" :alt="organizer"></li>
+                                <li v-for="organizer in item.organizer" :key="organizer"><img :src="`../product/${organizerPic(organizer)}.png`" :alt="organizer"></li>
                             </ul>
                             <h5 class="card-title limitLines-2 flex-grow-1 d-flex align-items-center">{{ item.Name }}</h5>
                             <div class="d-flex align-items-center">

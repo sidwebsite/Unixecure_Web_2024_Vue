@@ -5,7 +5,35 @@
     import Swal from 'sweetalert2'
     import Recaptcha from '../RecaptchaComponents.vue'
     import router from '@/router'
-    // 
+    // const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    // get api url
+    const getApiUrl = () => {
+        const api175Url = import.meta.env.VITE_API_175_URL
+        const api198Url = import.meta.env.VITE_API_198_URL
+        const api118Url = import.meta.env.VITE_API_118_URL
+        const apiUnixecureUrl = import.meta.env.VITE_API_UNIXECURE_URL
+        const currentUrl = window.location.origin
+        let apiBaseUrl = null
+
+        switch (currentUrl) {
+            case api175Url:
+                apiBaseUrl = api175Url
+                break;
+            case api198Url:
+                apiBaseUrl = api198Url
+                break;
+            case api118Url:
+                apiBaseUrl = api118Url
+                break;
+            case 'https://www.unixecure.com':
+                    apiBaseUrl = apiUnixecureUrl
+                break;
+            default:
+                break;
+        }
+        return apiBaseUrl
+    }
+    // validation schema
     const validationSchema = yup.object({
         Name: yup.string().required('此欄位不能為空白'),
         CompanyName: yup.string().required('此欄位不能為空白'),
@@ -209,6 +237,41 @@
         {text: '香港', value: '24'},
         {text: '其他', value: '25'},
     ]
+    // 提交表單資料
+    const createResource = async (values) => {
+        const api = getApiUrl()
+        try{
+            const response = await fetch(`${api}/api/white_papers/insert`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(values)
+            })
+            if(response.ok) {
+                await response.json();
+                Swal.fire({
+                    text: '表單成功送出',
+                    icon: 'success',
+                    confirmButtonText: '確定',
+                    preConfirm: () => {
+                        // 提交成功後清空表單
+                        resetForm();
+                        router.push({ name: 'statementsSuccess' })
+                    }
+                });
+            } else {
+                Swal.fire({
+                    text: '表單送出失敗',
+                    icon: 'error',
+                    confirmButtonText: '確定',
+                });
+                throw new Error(`Error: ${response.statusText}`);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        } 
+    }
     // recaptcha
     const recaptchaVerified = ref(false);
     const recaptchaToken = ref('');
@@ -246,44 +309,13 @@
         // 過濾掉空值
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")
-        );
+        )        
         // 處理表單提交
         if(values.Agree) {
             // reCAPTCHA 驗證
             if(recaptchaVerified.value) {
-                const response = fetch('https://10.13.202.198:7070/api/white_papers/insert', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify(filteredValues) 
-                })
-
-                if (!response.ok) {
-                    throw new Error(`Error: ${response.statusText}`)
-                }
-                response.then(res => res.json())
-                if(response.status === 200) {
-                    // 提交成功後清空表單
-                    Swal.fire({
-                        text: '表單送出成功',
-                        icon: 'success',
-                        confirmButtonText: '確定',
-                        preConfirm: () => {
-                            resetForm()
-                            router.push({ name: 'statementsSuccess' })
-                        }
-                    });
-                } else {
-                    Swal.fire({
-                        text: '表單送出失敗',
-                        icon: 'error',
-                        confirmButtonText: '確定',
-                    });
-                }
-                response.catch(error => console.log(error))
+                createResource(filteredValues)
             } else {
-
                 Swal.fire({
                     title: '錯誤',
                     text: '請完成 reCAPTCHA 驗證',

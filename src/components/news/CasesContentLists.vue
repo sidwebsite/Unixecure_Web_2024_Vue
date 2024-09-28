@@ -6,7 +6,7 @@
                 <div class="col-lg-4 col-md-6 list" v-for="item in casesData.slice(0, 3)" :key="item.Id">
                     <router-link :to="{ name: 'casesContent', params: { casesId: item.Id }}" :title="item.Name" class="default-card card">
                         <div class="card-img">
-                            <img :src="`pic/cases/${item.picDownloadPath}`" alt="">
+                            <img :src="`../pic/cases/${item.picDownloadPath}`" alt="">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title limitLines-2">{{ item.Name }}</h5>

@@ -6,7 +6,7 @@
                 <div class="col-lg-4 col-md-6 list" v-for="item in newsData.slice(0, 3)" :key="item.Id">
                     <router-link :to="{ name: 'newsContent', params: { newsId: item.Id }}" :title="item.Name" class="default-card card">
                         <div class="card-img">
-                            <img :src="`pic/news/${item.picDownloadPath}`" alt="">
+                            <img :src="`../pic/news/${item.picDownloadPath}`" alt="">
                         </div>
                         <div class="card-body">
                             <h5 class="card-title limitLines-2">{{ item.Name }}</h5>

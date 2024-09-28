@@ -8,7 +8,7 @@
                     <router-link :to="{ name: 'contractContent', params: { contractId: item.Id }}" :title="item.Name" class="default-card card" @click="getId(item.Id)">
                         <div class="card-body flex-grow-1 d-flex flex-column">
                             <ul class="card-logo d-flex">
-                                <li><img :src="`product/${item.picDownloadPath}`" :alt="item.product"></li>
+                                <li><img :src="`../product/${item.picDownloadPath}`" :alt="item.product"></li>
                             </ul>
                             <h5 class="card-title limitLines-2 flex-grow-1 d-flex align-items-center">{{ item.Name }}</h5>
                             <ul class="list-unstyled text-gray-400">

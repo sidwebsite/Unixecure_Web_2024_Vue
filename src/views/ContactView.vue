@@ -5,7 +5,34 @@
     import Swal from 'sweetalert2'
     import Recaptcha from '../components/RecaptchaComponents.vue'
     import router from '@/router'
+    // get api url
+    const getApiUrl = () => {
+        const api175Url = import.meta.env.VITE_API_175_URL
+        const api198Url = import.meta.env.VITE_API_198_URL
+        const api118Url = import.meta.env.VITE_API_118_URL
+        const apiUnixecureUrl = import.meta.env.VITE_API_UNIXECURE_URL
+        const currentUrl = window.location.origin
+        let apiBaseUrl = null
 
+        switch (currentUrl) {
+            case api175Url:
+                apiBaseUrl = api175Url
+                break;
+            case api198Url:
+                apiBaseUrl = api198Url
+                break;
+            case api118Url:
+                apiBaseUrl = api118Url
+                break;
+            case 'https://www.unixecure.com':
+                    apiBaseUrl = apiUnixecureUrl
+                break;
+            default:
+                break;
+        }
+        return apiBaseUrl
+    }
+    // validation schema
     const validationSchema = yup.object({
         ContactName: yup.string().required('此欄位不能為空白'),
         CompanyName: yup.string().required('此欄位不能為空白'),
@@ -209,6 +236,42 @@
         recaptchaToken.value = '';
         recaptchaVerified.value = false;
     };
+    // 正式提交表單
+    const createResource = async (values) => {
+        const api = 
+            console.log(values)
+            try {
+                const response = await fetch(`${api}/api/contact_us/insert`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(values)
+                })
+                if(response.ok) {
+                    await response.json();
+                    Swal.fire({
+                        text: '表單成功送出',
+                        icon: 'success',
+                        confirmButtonText: '確定',
+                        preConfirm: () => {
+                            // 提交成功後清空表單
+                            resetForm();
+                            router.push({ name: 'contactSuccess' })
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        text: '表單送出失敗',
+                        icon: 'error',
+                        confirmButtonText: '確定',
+                    });
+                    throw new Error(`Error: ${response.statusText}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+            } 
+        }
     // Submit
     const onSubmit = handleSubmit((values) => {
         const forms = {
@@ -231,50 +294,20 @@
         // 過濾掉空值
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")
-        );
+        )
+        createResource(filteredValues)
         // 處理表單提交
-        if (recaptchaVerified.value) {
-            // 傳遞表單數據
-            const response = fetch('https://10.13.202.198:7070/api/contact_us/insert', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(filteredValues)
-            })
-
-            if (!response.ok) {
-                throw new Error(`Error: ${response.statusText}`);
-            }
-            response.then(res => res.json())
-            // 提交成功
-            if(response.status === 200) {
-                Swal.fire({
-                    text: '聯絡我們表單成功送出',
-                    icon: 'success',
-                    confirmButtonText: '確定',
-                    preConfirm: () => {
-                        // 提交成功後清空表單
-                        resetForm();
-                        router.push({ name: 'contactSuccess' })
-                    }
-                });
-            } else {
-                Swal.fire({
-                    text: '表單送出失敗',
-                    icon: 'error',
-                    confirmButtonText: '確定',
-                });
-            }
-            response.catch(error => console.log(error))
-        } else {
-            Swal.fire({
-                title: '錯誤',
-                text: '請完成 reCAPTCHA 驗證',
-                icon: 'error',
-                confirmButtonText: '確定',
-            })
-        }
+        // if (recaptchaVerified.value) {
+        //     // 提交表單資料
+        //     createResource(filteredValues)
+        // } else {
+        //     Swal.fire({
+        //         title: '錯誤',
+        //         text: '請完成 reCAPTCHA 驗證',
+        //         icon: 'error',
+        //         confirmButtonText: '確定',
+        //     })
+        // }
     })
 </script>
 
