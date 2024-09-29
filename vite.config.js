@@ -33,11 +33,6 @@ const apiBaseUrl = 'https://10.13.202.198:7070'
 // https://vitejs.dev/config/
 export default defineConfig({
   server: {
-    cors: {
-      origin: apiBaseUrl,
-      methods: ['POST'],
-      allowedHeaders: ['Content-Type', 'application/json'], 
-    },
     proxy: {
       '/api': {
         target: apiBaseUrl,

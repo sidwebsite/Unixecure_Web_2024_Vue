@@ -5,34 +5,7 @@
     import Swal from 'sweetalert2'
     import Recaptcha from '../RecaptchaComponents.vue'
     import router from '@/router'
-    // const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    // get api url
-    const getApiUrl = () => {
-        const api175Url = import.meta.env.VITE_API_175_URL
-        const api198Url = import.meta.env.VITE_API_198_URL
-        const api118Url = import.meta.env.VITE_API_118_URL
-        const apiUnixecureUrl = import.meta.env.VITE_API_UNIXECURE_URL
-        const currentUrl = window.location.origin
-        let apiBaseUrl = null
 
-        switch (currentUrl) {
-            case api175Url:
-                apiBaseUrl = api175Url
-                break;
-            case api198Url:
-                apiBaseUrl = api198Url
-                break;
-            case api118Url:
-                apiBaseUrl = api118Url
-                break;
-            case 'https://www.unixecure.com':
-                    apiBaseUrl = apiUnixecureUrl
-                break;
-            default:
-                break;
-        }
-        return apiBaseUrl
-    }
     // validation schema
     const validationSchema = yup.object({
         Name: yup.string().required('此欄位不能為空白'),
@@ -239,9 +212,8 @@
     ]
     // 提交表單資料
     const createResource = async (values) => {
-        const api = getApiUrl()
         try{
-            const response = await fetch(`${api}/api/white_papers/insert`, {
+            const response = await fetch('/api/white_papers/insert', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

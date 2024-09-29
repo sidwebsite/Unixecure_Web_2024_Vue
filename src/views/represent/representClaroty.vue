@@ -55,7 +55,7 @@
     export default {
         data() {
             return {
-                productName: 'Claroty',
+                productName: 'claroty',
                 lists: [
                     {
                         Id: '1',

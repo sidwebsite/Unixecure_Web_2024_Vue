@@ -78,14 +78,6 @@
                         name: 'Rapid7'
                     },
                     {
-                        path: 'skyhigh',
-                        name: 'Skyhigh'
-                    },
-                    {
-                        path: 'SecurityScorecard',
-                        name: 'SecurityScorecard'
-                    },
-                    {
                         path: 'tufin',
                         name: 'tufin'
                     },

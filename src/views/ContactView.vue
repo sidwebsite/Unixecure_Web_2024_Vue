@@ -5,6 +5,7 @@
     import Swal from 'sweetalert2'
     import Recaptcha from '../components/RecaptchaComponents.vue'
     import router from '@/router'
+    
     // validation schema
     const validationSchema = yup.object({
         ContactName: yup.string().required('此欄位不能為空白'),
@@ -211,7 +212,6 @@
     };
     // 正式提交表單
     const createResource = async (values) => {
-        // const api = import.meta.env.VITE_API_198_URL
         console.log(JSON.stringify(values))
         try {
             const response = await fetch('/api/contact_us/insert', {
