@@ -277,21 +277,22 @@
             Remark: values.Remark,
             gtp: recaptchaToken.value
         }
-        const filteredValues = Object.fromEntries(
-            Object.entries(forms).filter(([, value]) => value !== "")
-        )
-        // 處理表單提交
-        if (recaptchaVerified.value) {
-            // 提交表單資料
-            createResource(filteredValues)
-        } else {
-            Swal.fire({
-                title: '錯誤',
-                text: '請完成 reCAPTCHA 驗證',
-                icon: 'error',
-                confirmButtonText: '確定',
-            })
-        }
+        createResource(forms)
+        // const filteredValues = Object.fromEntries(
+        //     Object.entries(forms).filter(([, value]) => value !== "")
+        // )
+        // // 處理表單提交
+        // if (recaptchaVerified.value) {
+        //     // 提交表單資料
+        //     createResource(filteredValues)
+        // } else {
+        //     Swal.fire({
+        //         title: '錯誤',
+        //         text: '請完成 reCAPTCHA 驗證',
+        //         icon: 'error',
+        //         confirmButtonText: '確定',
+        //     })
+        // }
     })
 </script>
 
