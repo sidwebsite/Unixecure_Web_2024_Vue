@@ -47,7 +47,7 @@ export default defineConfig({
       },
     },
   },
-  base: '/',
+  base: '/Unixecure_Web_2024_Vue/',
   plugins: [
     vue(),
   ],
