@@ -3,62 +3,69 @@ import { fileURLToPath, URL } from 'node:url'
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
-const apiBaseUrl = 'https://10.13.202.198:7070'
-// const getApiUrl = () => {
-//   const api175Url = import.meta.env.VITE_API_175_URL
-//   const api198Url = import.meta.env.VITE_API_198_URL
-//   const api118Url = import.meta.env.VITE_API_118_URL
-//   const apiUnixecureUrl = import.meta.env.VITE_API_UNIXECURE_URL
-//   const currentUrl = window.location.origin
-//   let apiBaseUrl = null
-//   switch (currentUrl) {
-//       case api175Url:
-//           apiBaseUrl = api175Url
-//           break;
-//       case 'https://10.13.202.198:7071':
-//           apiBaseUrl = api198Url
-//           break;
-//       case api118Url:
-//           apiBaseUrl = api118Url
-//           break;
-//       case 'https://www.unixecure.com':
-//               apiBaseUrl = apiUnixecureUrl
-//           break;
-//       default:
-//           break;
-//   }
-//   return apiBaseUrl
-// }
-
 // https://vitejs.dev/config/
+
 export default defineConfig({
   server: {
+    cors: true,
     proxy: {
-      '/api': {
-        target: apiBaseUrl,
+      '/175': {
+        target: 'https://10.13.202.175:8080',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
-        configure: (proxy, options) => {
-          proxy.on('proxyReq', (proxyReq, req) => {
-            console.log('Sending Request to the Target:', req.method, options.target + proxyReq.path);
-          });
-
-          proxy.on('proxyRes', (proxyRes, req) => {
-            console.log('Receiving Response from the Target:', req.method, options.target + req.url);
-          });
-
-          proxy.on('error', (err) => {
-            console.log('Error Occurred:', err);
-          });
-        }
+        bypass(req, res, options) {
+          const proxyUrl = options.target + options.rewrite(req.url)
+          res.setHeader('x-req-proxtUrl', proxyUrl)
+        },
+        rewrite: (path) => path.replace(/^\/175/, '/api')
+      },
+      '/198': {
+        target: 'https://10.13.202.198:7070',
+        changeOrigin: true,
+        bypass(req, res, options) {
+          const proxyUrl = options.target + options.rewrite(req.url)
+          res.setHeader('x-req-proxtUrl', proxyUrl)
+        },
+        rewrite: (path) => path.replace(/^\/198/, '/api')
+      },
+      '/118': {
+        target: 'https://118.163.244.11:8080',
+        changeOrigin: true,
+        bypass(req, res, options) {
+          const proxyUrl = options.target + options.rewrite(req.url)
+          res.setHeader('x-req-proxtUrl', proxyUrl)
+        },
+        rewrite: (path) => path.replace(/^\/118/, '/api')
+      },
+      '/unixecure': {
+        target: 'https://211.72.80.147:8080',
+        changeOrigin: true,
+        bypass(req, res, options) {
+          const proxyUrl = options.target + options.rewrite(req.url)
+          res.setHeader('x-req-proxtUrl', proxyUrl)
+        },
+        rewrite: (path) => path.replace(/^\/unixecure/, '/api')
       },
     },
   },
+  base: '/',
   plugins: [
     vue(),
   ],
-  base: '/Unixecure_Web_2024_Vue/',
-  
+  build: {
+    rollupOptions: {
+      output: {
+        assetFileNames: (assetInfo) => {
+          let extType = assetInfo.name.split('.').at(1);
+          if (/png|jpe?g|svg|gif|tiff|bmp|ico/i.test(extType)) {
+            extType = 'images';
+          }
+          return `assets/${extType}/[name]-[hash][extname]`;
+        },
+        chunkFileNames: 'assets/js/[name]-[hash].js',
+        entryFileNames: 'assets/js/[name]-[hash].js',
+      },
+    },
+  },
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

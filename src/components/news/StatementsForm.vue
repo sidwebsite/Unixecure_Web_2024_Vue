@@ -210,10 +210,26 @@
         {text: '香港', value: '24'},
         {text: '其他', value: '25'},
     ]
+    // 
+    const getApiUrl = (currentServerName) => {
+        switch (currentServerName) {
+            case '10.13.202.175':
+                return '/175'
+            case '10.13.202.198':
+                return '/198'
+            case '118.163.244.11':
+                return '/118'
+            case 'www.unixecure.com':
+                return '/unixecure'
+            default:
+                break;
+        }
+    }
     // 提交表單資料
     const createResource = async (values) => {
+        const hostname = window.location.hostname;
         try{
-            const response = await fetch('/api/white_papers/insert', {
+            const response = await fetch(`${getApiUrl(hostname)}/white_papers/insert`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -278,6 +294,7 @@
             ElseIssue: values.ElseIssue,
             gtp: recaptchaToken.value
         }
+        
         // 過濾掉空值
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")

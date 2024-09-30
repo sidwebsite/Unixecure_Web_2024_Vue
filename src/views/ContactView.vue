@@ -5,7 +5,6 @@
     import Swal from 'sweetalert2'
     import Recaptcha from '../components/RecaptchaComponents.vue'
     import router from '@/router'
-    
     // validation schema
     const validationSchema = yup.object({
         ContactName: yup.string().required('此欄位不能為空白'),
@@ -210,11 +209,25 @@
         recaptchaToken.value = '';
         recaptchaVerified.value = false;
     };
+    const getApiUrl = (currentServerName) => {
+        switch (currentServerName) {
+            case '10.13.202.175':
+                return '/175'
+            case '10.13.202.198':
+                return '/198'
+            case '118.163.244.11':
+                return '/118'
+            case 'www.unixecure.com':
+                return '/unixecure'
+            default:
+                break;
+        }
+    }
     // 正式提交表單
     const createResource = async (values) => {
-        console.log(JSON.stringify(values))
+        const hostname = window.location.hostname;
         try {
-            const response = await fetch('/api/contact_us/insert', {
+            const response = await fetch(`${getApiUrl(hostname)}/contact_us/insert`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -262,26 +275,23 @@
             Represent: values.Represent,
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
-            gtp: "test"
-            // gtp: recaptchaToken.value
+            gtp: recaptchaToken.value
         }
-        // 過濾掉空值
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")
         )
-        createResource(filteredValues)
         // 處理表單提交
-        // if (recaptchaVerified.value) {
-        //     // 提交表單資料
-        //     createResource(filteredValues)
-        // } else {
-        //     Swal.fire({
-        //         title: '錯誤',
-        //         text: '請完成 reCAPTCHA 驗證',
-        //         icon: 'error',
-        //         confirmButtonText: '確定',
-        //     })
-        // }
+        if (recaptchaVerified.value) {
+            // 提交表單資料
+            createResource(filteredValues)
+        } else {
+            Swal.fire({
+                title: '錯誤',
+                text: '請完成 reCAPTCHA 驗證',
+                icon: 'error',
+                confirmButtonText: '確定',
+            })
+        }
     })
 </script>
 
