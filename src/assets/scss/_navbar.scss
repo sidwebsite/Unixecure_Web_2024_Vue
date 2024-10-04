@@ -103,6 +103,9 @@
             overflow-y: visible;
             transform: translateX(0);
             > li {
+                > a.active-link {
+                    color: var(--primary);
+                }
                 &.menu-item {
                     position: relative;
                     > a {

@@ -229,7 +229,7 @@
     const createResource = async (values) => {
         const hostname = window.location.hostname;
         try{
-            const response = await fetch(`${getApiUrl(hostname)}/white_papers/insert`, {
+            const response = await fetch(`${getApiUrl(hostname)}/api/white_papers/insert`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

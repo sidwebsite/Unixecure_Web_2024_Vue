@@ -7,8 +7,18 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   server: {
-    cors: true,
+    cors:  {
+      origin: '*', 
+      methods: ['GET', 'POST', 'PUT', 'DELETE'], 
+      allowedHeaders: ['Content-Type', 'Authorization'], 
+      credentials: true,
+    },
     proxy: {
+      '/api': {
+        target: 'https://my-json-server.typicode.com/sidwebsite/unixecure_json_server',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api/, '')
+      },
       '/175': {
         target: 'https://10.13.202.175:8080',
         changeOrigin: true,
@@ -16,7 +26,7 @@ export default defineConfig({
           const proxyUrl = options.target + options.rewrite(req.url)
           res.setHeader('x-req-proxtUrl', proxyUrl)
         },
-        rewrite: (path) => path.replace(/^\/175/, '/api')
+        rewrite: (path) => path.replace(/^\/175/, '')
       },
       '/198': {
         target: 'https://10.13.202.198:7070',
@@ -25,7 +35,7 @@ export default defineConfig({
           const proxyUrl = options.target + options.rewrite(req.url)
           res.setHeader('x-req-proxtUrl', proxyUrl)
         },
-        rewrite: (path) => path.replace(/^\/198/, '/api')
+        rewrite: (path) => path.replace(/^\/198/, '')
       },
       '/118': {
         target: 'https://118.163.244.11:8080',
@@ -34,7 +44,7 @@ export default defineConfig({
           const proxyUrl = options.target + options.rewrite(req.url)
           res.setHeader('x-req-proxtUrl', proxyUrl)
         },
-        rewrite: (path) => path.replace(/^\/118/, '/api')
+        rewrite: (path) => path.replace(/^\/118/, '')
       },
       '/unixecure': {
         target: 'https://211.72.80.147:8080',
@@ -43,7 +53,7 @@ export default defineConfig({
           const proxyUrl = options.target + options.rewrite(req.url)
           res.setHeader('x-req-proxtUrl', proxyUrl)
         },
-        rewrite: (path) => path.replace(/^\/unixecure/, '/api')
+        rewrite: (path) => path.replace(/^\/unixecure/, '')
       },
     },
   },

@@ -1,7 +1,7 @@
 <template>
     <ul class="navbars" :class="{ active : isActive }">
         <li class="menu-item" :class="{ active : isAbout }">
-            <a href="#" @click="toggleAbout()" title="關於我們">關於我們</a>
+            <a href="#" :class="{'active-link': isActiveLink(abouts)}" @click="toggleAbout()" title="關於我們">關於我們</a>
             <ul class="sub-menu">
                 <li><RouterLink @click="isBars()" to="/aboutIntroduction" title="公司簡介">公司簡介</RouterLink></li>
                 <li><RouterLink @click="isBars()" to="/aboutTeam" title="經營團隊">經營團隊</RouterLink></li>
@@ -11,7 +11,7 @@
             </ul>
         </li>
         <li class="menu-item" :class="{ active : isServes }">
-            <a href="#" @click="toggleServes()" title="資安法專區">資安法專區</a>
+            <a href="#" :class="{'active-link': isActiveLink(serves)}" @click="toggleServes()" title="資安法專區">資安法專區</a>
             <ul class="sub-menu sub-menu-multiple">
                 <li>
                     <RouterLink @click="isBars()" to="/serveMoc" title="資安監控維運服務 MOC">資安監控維運服務 MOC</RouterLink>
@@ -26,16 +26,16 @@
                     <RouterLink @click="isBars()" to="/serveGcb" title="政府組態基準 GCB">政府組態基準 GCB</RouterLink>
                 </li>
                 <li>
-                    <RouterLink @click="isBars()" to="/serveCodeDetect" title="源碼檢測">原始碼檢測</RouterLink>
+                    <RouterLink @click="isBars()" to="/serveCodeDetect" title="原始碼檢測">原始碼檢測</RouterLink>
                     <RouterLink @click="isBars()" to="/serveAppCheck" title="APP 資安檢測">APP 檢測服務</RouterLink>
                     <RouterLink @click="isBars()" to="/serveCse" title="資通安全健檢">資安健診服務</RouterLink>
                 </li>
             </ul>
         </li>
-        <li><RouterLink @click="isBars()" to="/contractLists" title="共同供應契約">共同供應契約</RouterLink></li>
-        <li><RouterLink @click="isBars()" to="/representHome" title="代理產品">代理產品</RouterLink></li>
+        <li><RouterLink @click="isBars()" to="/contractLists" title="共同供應契約" :class="{'active-link': isActiveLink(contracts)}" >共同供應契約</RouterLink></li>
+        <li><RouterLink @click="isBars()" to="/representHome" :class="{'active-link': isActiveLink(represents)}" title="代理產品">代理產品</RouterLink></li>
         <li class="menu-item" :class="{ active : isNews }">
-            <a href="#" @click="toggleNews()" title="最新消息">最新消息</a>
+            <a href="#" :class="{'active-link': isActiveLink(news)}" @click="toggleNews()" title="最新消息">最新消息</a>
             <ul class="sub-menu">
                 <li><RouterLink @click="isBars()" to="/casesLists" title="成功案例">成功案例</RouterLink></li>
                 <li><RouterLink @click="isBars()" to="/newsLists" title="新聞中心">新聞中心</RouterLink></li>
@@ -44,7 +44,7 @@
                 <li><RouterLink @click="isBars()" to="/statementsLists" title="報告書專區">報告書專區</RouterLink></li>
             </ul>
         </li>
-        <li><RouterLink @click="isBars()" to="/contact" title="聯繫我們">聯繫我們</RouterLink></li>
+        <li><RouterLink @click="isBars()" to="/contact" active-class="active-link" title="聯繫我們">聯繫我們</RouterLink></li>
     </ul>
     <ul>
         <li class="d-block d-lg-none"><a href="#" id="menu-bars" title="" @click="isBars()"><i class="fa-solid" :class="{ 'fa-bars' : iconBars, 'fa-xmark' : iconXmark }"></i></a></li>
@@ -59,7 +59,13 @@
                 iconXmark: false,
                 isAbout: false,
                 isServes: false,
-                isNews: false
+                isNews: false,
+                route: this.$route,
+                abouts: ['aboutIntroduction', 'aboutTeam', 'aboutAuthentication', 'aboutMap', 'aboutRecruit'],
+                serves: ['serveMoc', 'serveHeis', 'serveSrmas', 'serveSivas', 'serveLucas', 'serveSesc', 'serveSoc', 'serveGcb', 'serveCodeDetect', 'serveAppCheck', 'serveCse'],
+                contracts: ['contractLists', 'contractContent'],
+                represents:['representHome', 'cellopoint', 'eLock', 'delinea', 'illumio', 'invicti', 'entrust', 'entrustContent01', 'entrustContent02', 'entrustContent03', 'entrustContent04', 'opswat', 'neithnet', 'Rapid7', 'Rapid7Content01', 'Rapid7Content02', 'Rapid7Content03', 'Rapid7Content04', 'Rapid7Content05', 'Rapid7Content06', 'tufin', 'claroty', 'clarotyContent01', 'clarotyContent02'],
+                news: ['casesLists', 'casesContent', 'newsLists', 'newsContent', 'videoList', 'videoContent', 'eventsLists', 'eventsContent', 'statementsLists']
             }
         },
         methods: {
@@ -80,6 +86,14 @@
             toggleNews() {
                 this.isNews = !this.isNews
             },
+            isActiveLink(routeNames) {
+                return routeNames.includes(this.route.name);
+            }
+        },
+        watch: {
+            '$route'(to) {
+                this.route = to;
+            }
         }
     }
 </script>

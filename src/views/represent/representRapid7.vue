@@ -43,42 +43,42 @@
                         product: 'Rapid7',
                         Name: 'Rapid7 insightAppSec<br />網站應用程式安全測試',
                         typeName: 'Cybersecurity+ 護雲',
-                        link: '/representRapid7Content01'
+                        link: '/Rapid7Content01'
                     },
                     {
                         Id: '2',
                         product: 'Rapid7',
                         Name: 'Rapid7 insightCloudSec<br />雲端虛擬安全',
                         typeName: '雲端虛擬安全',
-                        link: '/representRapid7Content02'
+                        link: '/Rapid7Content02'
                     },
                     {
                         Id: '3',
                         product: 'Rapid7',
                         Name: 'Rapid7 insightIDR <br />XDR+SIEM解決方案',
                         typeName: 'Cybersecurity+ 護雲',
-                        link: '/representRapid7Content03'
+                        link: '/Rapid7Content03'
                     },
                     {
                         Id: '4',
                         product: 'Rapid7',
                         Name: 'Rapid7 Threat Command<br />外部威脅情報解決方案',
                         typeName: '核心資料安全',
-                        link: '/representRapid7Content04'
+                        link: '/Rapid7Content04'
                     },
                     {
                         Id: '5',
                         product: 'Rapid7',
                         Name: 'Rapid7 Metasploit Pro<br />滲透測試工具',
                         typeName: 'Cybersecurity+ 護雲',
-                        link: '/representRapid7Content05'
+                        link: '/Rapid7Content05'
                     },
                     {
                         Id: '6',
                         product: 'Rapid7',
                         Name: 'Rapid7 Nexpose<br />弱點掃描與管理系統',
                         typeName: 'Cybersecurity+ 護雲',
-                        link: '/representRapid7Content06'
+                        link: '/Rapid7Content06'
                     },
                 ]
             }
