@@ -226,11 +226,10 @@
     // }
     // axios
     const axiosResource = (value) => {
-        const api = 'https://10.13.202.198:7070/api/contact_us/test'
         const config = {
             'Content-Type': 'application/json'
         }
-        axios.post(api, value, config)
+        axios.post('/api', value, config)
         .then((response) => {
             console.log(response.data)
         })
@@ -272,7 +271,7 @@
     } 
     // Submit
     const onSubmit = handleSubmit((values) => {
-        const forms = {
+        const forms = ref({
             CompanyName: values.CompanyName,
             ContactName: values.ContactName,
             Department: values.Department,
@@ -288,7 +287,7 @@
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
             // gtp: recaptchaToken.value
-        }
+        })
         // createResource(forms)
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")

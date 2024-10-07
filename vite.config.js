@@ -15,7 +15,7 @@ export default defineConfig({
     },
     proxy: {
       '/api': {
-        target: 'https://my-json-server.typicode.com/sidwebsite/unixecure_json_server',
+        target: 'https://10.13.202.198:7070/api/contact_us/test',
         changeOrigin: true,
         rewrite: (path) => path.replace(/^\/api/, '')
       },
