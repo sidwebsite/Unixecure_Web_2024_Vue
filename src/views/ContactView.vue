@@ -1,6 +1,6 @@
 <script setup>
     import axios from 'axios';
-    import { ref } from 'vue';
+    // import { ref } from 'vue';
     import { useForm } from 'vee-validate'
     import * as yup from 'yup';
     import Swal from 'sweetalert2'
@@ -226,31 +226,16 @@
     // }
     // axios
     const axiosResource = (value) => {
-        // const api = 'https://10.13.202.198:7070/api/contact_us/test'
+        const api = 'https://10.13.202.198:7070/api/contact_us/test'
         const config = {
             'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         }
-        axios.post('/api/contact_us/test', value, config)
-        .then((response) => {
-            console.log(response.data)
-        })
-        .catch (err => console.log(err.message))
-    }
-    // 正式提交表單
-    const createResource = (values) => {
-        fetch('https://10.13.202.198:7070/api/contact_us/test', {
-            method: 'POST',
-            headers: {
-                'Access-Control-Allow-Origin': '*',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(values)
-        })
-        .then(res => {return res.json()})
-        .then(result  => {
-            console.log(result.state)
-            if(result.status === 'success') {
+        axios.post(api, JSON.stringify(value), config)
+        .then((res) => {
+            console.log(res.data)
+            const response = res.data
+            if(response.status === 201) {
                 Swal.fire({
                     text: '表單成功送出',
                     icon: 'success',
@@ -263,14 +248,48 @@
                 });
             } else {
                 Swal.fire({
-                    text: result.msg,
+                    text: response.msg,
                     icon: 'error',
                     confirmButtonText: '確定',
                 });
             }
         })
-        .catch (error => { console.error('Error:', error)}) 
-    } 
+        .catch (err => console.log(err.message))
+    }
+    // 正式提交表單
+    // const createResource = (values) => {
+    //     fetch('https://10.13.202.198:7070/api/contact_us/test', {
+    //         method: 'POST',
+    //         headers: {
+    //             'Access-Control-Allow-Origin': '*',
+    //             'Content-Type': 'application/json',
+    //         },
+    //         body: JSON.stringify(values)
+    //     })
+    //     .then(res => {return res.json()})
+    //     .then(result  => {
+    //         console.log(result.state)
+    //         if(result.status === 'success') {
+    //             Swal.fire({
+    //                 text: '表單成功送出',
+    //                 icon: 'success',
+    //                 confirmButtonText: '確定',
+    //                 preConfirm: () => {
+    //                     // 提交成功後清空表單
+    //                     resetForm();
+    //                     router.push({ name: 'contactSuccess' })
+    //                 }
+    //             });
+    //         } else {
+    //             Swal.fire({
+    //                 text: result.msg,
+    //                 icon: 'error',
+    //                 confirmButtonText: '確定',
+    //             });
+    //         }
+    //     })
+    //     .catch (error => { console.error('Error:', error)}) 
+    // } 
     // Submit
     const onSubmit = handleSubmit((values) => {
         const forms = {

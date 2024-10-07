@@ -10,13 +10,13 @@ export default defineConfig({
     cors:  true,
     proxy: {
       '/api': {
-        target: 'https://10.13.202.198:7070',
+        target: 'http://localhost:3000',
         changeOrigin: true,
         bypass(req, res, options) {
           const proxyUrl = options.target + options.rewrite(req.url)
           res.setHeader('x-req-proxtUrl', proxyUrl)
         },
-        rewrite: (path) => path.replace(/^\/api/, '/api')
+        rewrite: (path) => path.replace(/^\/api/, '')
       },
       '/175': {
         target: 'https://10.13.202.175:8080',
