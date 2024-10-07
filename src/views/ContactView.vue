@@ -1,4 +1,5 @@
 <script setup>
+    import axios from 'axios';
     import { ref } from 'vue';
     import { useForm } from 'vee-validate'
     import * as yup from 'yup';
@@ -229,7 +230,7 @@
         const config = {
             'Content-Type': 'application/json'
         }
-        this.$http.post(api, value, config)
+        axios.post(api, value, config)
         .then((response) => {
             console.log(response.data)
         })
