@@ -233,26 +233,28 @@
             },
             body: JSON.stringify(values)
         })
-        const state = response.json();
-        console.log(state)
-        if(state.status === 'success') {
-            Swal.fire({
-                text: '表單成功送出',
-                icon: 'success',
-                confirmButtonText: '確定',
-                preConfirm: () => {
-                    // 提交成功後清空表單
-                    resetForm();
-                    router.push({ name: 'contactSuccess' })
-                }
-            });
-        } else {
-            Swal.fire({
-                text: response.msg,
-                icon: 'error',
-                confirmButtonText: '確定',
-            });
-        }
+        response.then(res => res.json())
+        response.then(res => {
+            console.log(res.state)
+            if(res.state.status === 'success') {
+                Swal.fire({
+                    text: '表單成功送出',
+                    icon: 'success',
+                    confirmButtonText: '確定',
+                    preConfirm: () => {
+                        // 提交成功後清空表單
+                        resetForm();
+                        router.push({ name: 'contactSuccess' })
+                    }
+                });
+            } else {
+                Swal.fire({
+                    text: res.msg,
+                    icon: 'error',
+                    confirmButtonText: '確定',
+                });
+            }
+        })
         response.catch (error => { console.error('Error:', error)}) 
     } 
     // Submit
