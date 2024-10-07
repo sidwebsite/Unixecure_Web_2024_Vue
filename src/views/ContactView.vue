@@ -226,14 +226,16 @@
     // }
     // axios
     const axiosResource = (value) => {
+        // const api = 'https://10.13.202.198:7070/api/contact_us/test'
         const config = {
+            'Access-Control-Allow-Origin': '*',
             'Content-Type': 'application/json'
         }
-        axios.post('/api', value, config)
+        axios.post('/api/contact_us/test', value, config)
         .then((response) => {
             console.log(response.data)
         })
-        .catch (err => console.log(`Error:${err}`))
+        .catch (err => console.log(err.message))
     }
     // 正式提交表單
     const createResource = (values) => {
@@ -271,7 +273,7 @@
     } 
     // Submit
     const onSubmit = handleSubmit((values) => {
-        const forms = ref({
+        const forms = {
             CompanyName: values.CompanyName,
             ContactName: values.ContactName,
             Department: values.Department,
@@ -287,7 +289,8 @@
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
             // gtp: recaptchaToken.value
-        })
+        }
+        // console.log(forms)
         // createResource(forms)
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")
