@@ -8,9 +8,6 @@ import App from './App.vue'
 import router from './router'
 import vSelect from "vue-select"
 import VueSocials from 'vue-socials'
-// axios
-import axios from 'axios'
-import VueAxios from 'vue-axios'
 
 vSelect.props.components.default = () => ({
     OpenIndicator: {
@@ -23,7 +20,6 @@ const app = createApp(App)
 app.use(createPinia())
 app.use(router)
 app.component("v-select", vSelect)
-app.use(VueAxios, axios)
 app.use(VueSocials)
 const options = {
     confirmButtonColor: '#303878',
