@@ -209,55 +209,52 @@
         recaptchaToken.value = '';
         recaptchaVerified.value = false;
     };
-    const getApiUrl = (currentServerName) => {
-        switch (currentServerName) {
-            case '10.13.202.175':
-                return '/175'
-            case '10.13.202.198':
-                return '/198'
-            case '118.163.244.11':
-                return '/118'
-            case 'www.unixecure.com':
-                return '/unixecure'
-            default:
-                break;
-        }
-    }
+    // const getApiUrl = (currentServerName) => {
+    //     switch (currentServerName) {
+    //         case '10.13.202.175':
+    //             return '/175'
+    //         case '10.13.202.198':
+    //             return '/198'
+    //         case '118.163.244.11':
+    //             return '/118'
+    //         case 'www.unixecure.com':
+    //             return '/unixecure'
+    //         default:
+    //             break;
+    //     }
+    // }
     // 正式提交表單
-    const createResource = async (values) => {
-        const hostname = window.location.hostname;
-        try {
-            const response = await fetch(`${getApiUrl(hostname)}/api/contact_us/insert`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(values)
-            })
-            if(response.ok) {
-                await response.json();
-                Swal.fire({
-                    text: '表單成功送出',
-                    icon: 'success',
-                    confirmButtonText: '確定',
-                    preConfirm: () => {
-                        // 提交成功後清空表單
-                        resetForm();
-                        router.push({ name: 'contactSuccess' })
-                    }
-                });
-            } else {
-                Swal.fire({
-                    text: '表單送出失敗',
-                    icon: 'error',
-                    confirmButtonText: '確定',
-                });
-                throw new Error(`Error: ${response.statusText}`);
-            }
-        } catch (error) {
-            console.error('Error:', error);
-        } 
-    }
+    const createResource = (values) => {
+        const response = fetch('https://10.13.202.198:7070/api/contact_us/test', {
+            method: 'POST',
+            headers: {
+                'Access-Control-Allow-Origin': '*',
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(values)
+        })
+        const state = response.json();
+        console.log(state)
+        if(state.status === 'success') {
+            Swal.fire({
+                text: '表單成功送出',
+                icon: 'success',
+                confirmButtonText: '確定',
+                preConfirm: () => {
+                    // 提交成功後清空表單
+                    resetForm();
+                    router.push({ name: 'contactSuccess' })
+                }
+            });
+        } else {
+            Swal.fire({
+                text: response.msg,
+                icon: 'error',
+                confirmButtonText: '確定',
+            });
+        }
+        response.catch (error => { console.error('Error:', error)}) 
+    } 
     // Submit
     const onSubmit = handleSubmit((values) => {
         const forms = {
@@ -281,18 +278,19 @@
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")
         )
+        createResource(filteredValues)
         // 處理表單提交
-        if (recaptchaVerified.value) {
-            // 提交表單資料
-            createResource(filteredValues)
-        } else {
-            Swal.fire({
-                title: '錯誤',
-                text: '請完成 reCAPTCHA 驗證',
-                icon: 'error',
-                confirmButtonText: '確定',
-            })
-        }
+        // if (recaptchaVerified.value) {
+        //     // 提交表單資料
+        //     createResource(filteredValues)
+        // } else {
+        //     Swal.fire({
+        //         title: '錯誤',
+        //         text: '請完成 reCAPTCHA 驗證',
+        //         icon: 'error',
+        //         confirmButtonText: '確定',
+        //     })
+        // }
     })
 </script>
 
