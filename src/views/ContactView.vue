@@ -3,7 +3,7 @@
     import { useForm } from 'vee-validate'
     import * as yup from 'yup';
     import Swal from 'sweetalert2'
-    import Recaptcha from '../components/RecaptchaComponents.vue'
+    // import Recaptcha from '../components/RecaptchaComponents.vue'
     import router from '@/router'
     // validation schema
     const validationSchema = yup.object({
@@ -197,18 +197,18 @@
         {text: 'Tufin', value: '10'}
     ]
     // recaptcha
-    const recaptchaVerified = ref(false);
-    const recaptchaToken = ref('');
+    // const recaptchaVerified = ref(false);
+    // const recaptchaToken = ref('');
 
-    const onRecaptchaVerified = (token) => {
-        recaptchaToken.value = token;
-        recaptchaVerified.value = true;
-    };
+    // const onRecaptchaVerified = (token) => {
+    //     recaptchaToken.value = token;
+    //     recaptchaVerified.value = true;
+    // };
 
-    const onRecaptchaExpired = () => {
-        recaptchaToken.value = '';
-        recaptchaVerified.value = false;
-    };
+    // const onRecaptchaExpired = () => {
+    //     recaptchaToken.value = '';
+    //     recaptchaVerified.value = false;
+    // };
     // const getApiUrl = (currentServerName) => {
     //     switch (currentServerName) {
     //         case '10.13.202.175':
@@ -223,6 +223,18 @@
     //             break;
     //     }
     // }
+    // axios
+    const axiosResource = (value) => {
+        const api = 'https://10.13.202.198:7070/api/contact_us/test'
+        const config = {
+            'Content-Type': 'application/json'
+        }
+        this.$http.post(api, value, config)
+        .then((response) => {
+            console.log(response.data)
+        })
+        .catch (err => console.log(`Error:${err}`))
+    }
     // 正式提交表單
     const createResource = (values) => {
         fetch('https://10.13.202.198:7070/api/contact_us/test', {
@@ -274,13 +286,14 @@
             Represent: values.Represent,
             ConsultingProject: values.ConsultingProject.join(','),
             Remark: values.Remark,
-            gtp: recaptchaToken.value
+            // gtp: recaptchaToken.value
         }
         // createResource(forms)
         const filteredValues = Object.fromEntries(
             Object.entries(forms).filter(([, value]) => value !== "")
         )
-        createResource(filteredValues)
+        axiosResource(filteredValues)
+        // createResource(filteredValues)
         // 處理表單提交
         // if (recaptchaVerified.value) {
         //     // 提交表單資料
@@ -435,9 +448,9 @@
                                 <span class="text-alarm">{{ errors.Remark }}</span>
                             </div>
                         </div>
-                        <div class="col-12 mb-6">
+                        <!-- <div class="col-12 mb-6">
                             <Recaptcha @verified="onRecaptchaVerified" @expired="onRecaptchaExpired" />
-                        </div>
+                        </div> -->
                         <div class="col-12">
                             <div class="text-center mb-4">
                                 <button type="submit" class="btn btn-contact">聯繫我們</button>
