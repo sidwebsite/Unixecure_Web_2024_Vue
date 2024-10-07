@@ -225,7 +225,7 @@
     // }
     // 正式提交表單
     const createResource = (values) => {
-        const response = fetch('https://10.13.202.198:7070/api/contact_us/test', {
+        fetch('https://10.13.202.198:7070/api/contact_us/test', {
             method: 'POST',
             headers: {
                 'Access-Control-Allow-Origin': '*',
@@ -233,8 +233,8 @@
             },
             body: JSON.stringify(values)
         })
-        response.then(res => res.json())
-        response.then(res => {
+        .then(res => {return res.json()})
+        .then(res => {
             console.log(res.state)
             if(res.state.status === 'success') {
                 Swal.fire({
@@ -255,7 +255,7 @@
                 });
             }
         })
-        response.catch (error => { console.error('Error:', error)}) 
+        .catch (error => { console.error('Error:', error)}) 
     } 
     // Submit
     const onSubmit = handleSubmit((values) => {
