@@ -234,9 +234,9 @@
             body: JSON.stringify(values)
         })
         .then(res => {return res.json()})
-        .then(res => {
-            console.log(res.state)
-            if(res.state.status === 'success') {
+        .then(result  => {
+            console.log(result.state)
+            if(result.status === 'success') {
                 Swal.fire({
                     text: '表單成功送出',
                     icon: 'success',
@@ -249,7 +249,7 @@
                 });
             } else {
                 Swal.fire({
-                    text: res.msg,
+                    text: result.msg,
                     icon: 'error',
                     confirmButtonText: '確定',
                 });
